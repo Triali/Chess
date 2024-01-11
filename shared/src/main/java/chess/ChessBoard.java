@@ -82,7 +82,7 @@ public class ChessBoard {
     }
 
     public void printBoard(){
-        for (int row = 1; row <=8 ; row++) {
+        for (int row = 8; row >=1 ; row--) {
             for (int col = 1; col <=8 ; col++) {
                 ChessPiece currPiece = getPiece(new ChessPosition(row,col));
                 if(currPiece == null)
@@ -90,6 +90,7 @@ public class ChessBoard {
                     System.out.print("|0");
                 }
                 else{
+                    System.out.print("|");
                     System.out.print(currPiece);
                 }
 

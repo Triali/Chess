@@ -65,7 +65,7 @@ public class ChessPiece {
             case KNIGHT -> "n";
         };
         if(color == ChessGame.TeamColor.WHITE)
-            print.toUpperCase();
+           print = print.toUpperCase();
         return print;
     }
 }

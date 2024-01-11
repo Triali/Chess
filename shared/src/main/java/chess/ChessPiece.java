@@ -55,4 +55,17 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         throw new RuntimeException("Not implemented");
     }
+    public String toString(){
+        String print = switch (type) {
+            case KING -> "k";
+            case PAWN -> "p";
+            case ROOK -> "r";
+            case QUEEN -> "q";
+            case BISHOP -> "b";
+            case KNIGHT -> "n";
+        };
+        if(color == ChessGame.TeamColor.WHITE)
+            print.toUpperCase();
+        return print;
+    }
 }

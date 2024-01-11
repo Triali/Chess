@@ -2,9 +2,13 @@ package chess;
 
 public class Testing {
     public static void main(String[] args) {
-        ChessPosition newPos = new ChessPosition(1,2);
-        System.out.println(newPos.getRow());
-        System.out.println(newPos.getColumn());
+        ChessBoard board = new ChessBoard();
+        ChessPosition pos = new ChessPosition(1,1);
+        System.out.println(board.getPiece(pos));
+
+
+
+//        newPos.printBoard();
 
     }
 }

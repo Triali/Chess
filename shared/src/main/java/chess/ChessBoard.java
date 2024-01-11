@@ -1,4 +1,10 @@
 package chess;
+import java.util.*;
+
+
+import static chess.ChessGame.TeamColor.*;
+import static chess.ChessPiece.PieceType.*;
+
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
@@ -9,8 +15,9 @@ package chess;
 public class ChessBoard {
 
     public ChessBoard() {
-        
+        initalSetup();
     }
+    Map<ChessPosition,ChessPiece> pieces = new HashMap<>();
 
     /**
      * Adds a chess piece to the chessboard
@@ -19,7 +26,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        throw new RuntimeException("Not implemented");
+        pieces.put(position,piece);
     }
 
     /**
@@ -30,7 +37,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        return pieces.get(position);
     }
 
     /**
@@ -38,6 +45,60 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+        pieces.clear();
+        initalSetup();
     }
+
+    public void initalSetup(){
+        // add the pawns
+        for (int i = 1; i <= 8; i++) {
+            addPiece(new ChessPosition(2,i), new ChessPiece(WHITE,PAWN));
+            addPiece(new ChessPosition(7,i), new ChessPiece(BLACK,PAWN));
+        }
+        // add the Backline
+        for (int i = 1; i <=8 ; i+=7) {
+            // set the color
+            ChessGame.TeamColor color = (i==1) ? (WHITE):(BLACK);
+
+            // add the Rooks
+            addPiece(new ChessPosition(i,1), new ChessPiece(color,ROOK));
+            addPiece(new ChessPosition(i,8), new ChessPiece(color,ROOK));
+
+            // add the kights
+            addPiece(new ChessPosition(i,2), new ChessPiece(color,KNIGHT));
+            addPiece(new ChessPosition(i,7), new ChessPiece(color,KNIGHT));
+
+            // add the Bishops
+            addPiece(new ChessPosition(i,3), new ChessPiece(color,BISHOP));
+            addPiece(new ChessPosition(i,6), new ChessPiece(color,BISHOP));
+
+            // add the Queen
+            addPiece(new ChessPosition(i,4), new ChessPiece(color,QUEEN));
+
+            // add the King
+            addPiece(new ChessPosition(i,5), new ChessPiece(color,KING));
+        }
+
+    }
+
+    public void printBoard(){
+        for (int row = 1; row <=8 ; row++) {
+            for (int col = 1; col <=8 ; col++) {
+                ChessPiece currPiece = getPiece(new ChessPosition(row,col));
+                if(currPiece == null)
+                {
+                    System.out.print("|0");
+                }
+                else{
+                    System.out.print(currPiece);
+                }
+
+            }
+            System.out.println("|");
+
+        }
+    }
+
+
+
 }

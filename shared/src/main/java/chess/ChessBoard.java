@@ -83,11 +83,12 @@ public class ChessBoard {
 
     public void printBoard(){
         for (int row = 8; row >=1 ; row--) {
+
             for (int col = 1; col <=8 ; col++) {
                 ChessPiece currPiece = getPiece(new ChessPosition(row,col));
                 if(currPiece == null)
                 {
-                    System.out.print("|0");
+                    System.out.print("|\u00A0\u2008\u2008");
                 }
                 else{
                     System.out.print("|");

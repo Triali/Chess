@@ -12,11 +12,15 @@ public class ChessPiece {
     ChessGame.TeamColor color;
     ChessPiece.PieceType type;
 
+    // to check eligablitiy for castling
+    boolean hasMoved;
+
 
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType pieceType) {
         color = pieceColor;
         type = pieceType;
+        hasMoved = false;
     }
 
     /**
@@ -55,17 +59,49 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         throw new RuntimeException("Not implemented");
     }
-    public String toString(){
-        String print = switch (type) {
-            case KING -> "k";
-            case PAWN -> "p";
-            case ROOK -> "r";
-            case QUEEN -> "q";
-            case BISHOP -> "b";
-            case KNIGHT -> "n";
-        };
-        if(color == ChessGame.TeamColor.WHITE)
-           print = print.toUpperCase();
+    public String toString()
+    {
+        String print;
+        if (getTeamColor() == ChessGame.TeamColor.WHITE)
+        {
+             print = switch (type)
+            {
+                case KING -> "\u265A";
+                case PAWN -> "\u265F";
+                case ROOK -> "\u265C";
+                case QUEEN -> "\u265B";
+                case BISHOP -> "\u265D";
+                case KNIGHT -> "\u265E";
+            };
+        } else
+        {
+            print = switch (type)
+            {
+                case KING -> "\u2654";
+                case PAWN -> "\u2659";
+                case ROOK -> "\u2656";
+                case QUEEN -> "\u2655";
+                case BISHOP -> "\u2657";
+                case KNIGHT -> "\u2658";
+            };
+        }
         return print;
+    }
+
+    // checking pieces on diagonals given a distance
+    // checking pieces on the straights given a distance
+    // checking pieces on the kights jumps
+
+    public void checkDiagonals(ChessBoard board,ChessPosition position){
+        // 1,1
+
+
+        // 1,-1
+        // -1,-1
+        // -1,1
+    }
+
+    public void checkStraights(ChessBoard board,ChessPosition position){
+
     }
 }

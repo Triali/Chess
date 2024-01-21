@@ -1,35 +1,31 @@
 package chess;
 
 
-
+import java.util.Collection;
 
 public class Testing {
-    public static int[] rotate90(int[] x){
-        int a = x[0];
-        int b = x[1];
-        x[0] = b*-1;
-        x[1] = a;
-        return x;
-    }
+
     public static void main(String[] args) {
         ChessBoard board = new ChessBoard();
+        ChessPosition test = new ChessPosition(2,5);
+        ChessPiece piece= board.getPiece(test);
+        int[] x = {-1,0};
+                board.printBoard();
+        Collection<ChessMove> moves= piece.checkDirection(board,test,x);
+        for (ChessMove move:moves)
+        {
+            System.out.println(move);
+        }
 
 
 
 
-        board.printBoard();
 
-int[] x = {1,1};
+
+
+
 //        x= rotate90(x);
-        System.out.println("(" + x[0]+","+x[1]+")");
-        x= rotate90(x);
-        System.out.println("(" + x[0]+","+x[1]+")");
-        x= rotate90(x);
-        System.out.println("(" + x[0]+","+x[1]+")");
-        x= rotate90(x);
-        System.out.println("(" + x[0]+","+x[1]+")");
 
-//
 //
 //        System.out.println("(" + x+","+y+")");
 //        x = b*-1;

@@ -38,6 +38,19 @@ public class ChessPosition {
         ChessPosition that = (ChessPosition) o;
         return row == that.row && col == that.col;
     }
+    public ChessPosition addPosition(int[] toAdd)
+    {
+        return new ChessPosition(row +toAdd[0],col +toAdd[1]);
+
+    }
+
+    @Override
+    public String toString()
+    {
+char col = '`';
+col += this.col;
+return Integer.toString(this.row)+col;
+    }
 
     @Override
     public int hashCode() {

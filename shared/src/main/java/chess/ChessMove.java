@@ -57,8 +57,8 @@ public class ChessMove
     @Override
     public String toString()
     {
-        return start.toString() + "-> " + end.toString() + ((this.promotionPiece == null)?(""):(": " + this.promotionPiece));
-
+//        return start.toString() + "-> " + end.toString() + ((this.promotionPiece == null)?(""):(": " + this.promotionPiece));
+return end.toString();
     }
 
 };

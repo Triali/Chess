@@ -7,15 +7,12 @@ public class Testing {
 
     public static void main(String[] args) {
         ChessBoard board = new ChessBoard();
-        ChessPosition test = new ChessPosition(2,5);
-        ChessPiece piece= board.getPiece(test);
-        int[] x = {-1,0};
-                board.printBoard();
-        Collection<ChessMove> moves= piece.checkDirection(board,test,x);
-        for (ChessMove move:moves)
-        {
-            System.out.println(move);
-        }
+        ChessPosition start= new ChessPosition(5,4);
+        ChessPiece bishop = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
+        board.addPiece(start,bishop);
+        board.printBoard();
+        Collection<ChessMove> moves = bishop.checkDiagonals(board,start,8);
+        System.out.println(moves);
 
 
 

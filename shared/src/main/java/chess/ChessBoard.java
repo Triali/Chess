@@ -14,10 +14,8 @@ import static chess.ChessPiece.PieceType.*;
  */
 public class ChessBoard {
 
-    public ChessBoard() {
-        initalSetup();
-    }
-    Map<ChessPosition,ChessPiece> pieces = new HashMap<>();
+    public ChessBoard() {}
+    private Map<ChessPosition,ChessPiece> pieces = new HashMap<>();
 
     /**
      * Adds a chess piece to the chessboard
@@ -27,6 +25,15 @@ public class ChessBoard {
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
         pieces.put(position,piece);
+    }
+
+    /**
+     * Removes a chess piece from the board
+     *
+     * @param position The position to get the piece from
+     */
+    public void removePiece(ChessPosition position){
+        pieces.remove(position);
     }
 
     /**

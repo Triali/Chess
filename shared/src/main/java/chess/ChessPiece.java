@@ -64,7 +64,35 @@ public class ChessPiece
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition)
     {
-        throw new RuntimeException("Not implemented");
+        ArrayList<ChessMove> possibleMoves = new ArrayList();
+        switch (type)
+        {
+            case KING:
+                possibleMoves.addAll(checkDiagonals(board, myPosition, 1));
+                possibleMoves.addAll(checkStraights(board, myPosition, 1));
+                break;
+            case PAWN:
+                break;
+            case ROOK:
+                possibleMoves.addAll(checkStraights(board, myPosition, 8));
+                break;
+            case QUEEN:
+                possibleMoves.addAll(checkDiagonals(board, myPosition, 8));
+                possibleMoves.addAll(checkStraights(board, myPosition, 8));
+                break;
+            case BISHOP:
+                possibleMoves.addAll(checkDiagonals(board, myPosition, 8));
+                break;
+            case KNIGHT:
+                possibleMoves.addAll(checkJumps(board, myPosition));
+                break;
+        }
+        return possibleMoves;
+    }
+
+    boolean isOpposite(ChessGame.TeamColor otherColor)
+    {
+        return (color != otherColor);
     }
 
     @Override
@@ -101,27 +129,59 @@ public class ChessPiece
     // checking pieces on the straights given a distance
     // checking pieces on the kights jumps
 
-    public Collection<ChessMove> checkDiagonals(ChessBoard board, ChessPosition startPos)
+    public Collection<ChessMove> checkDiagonals(ChessBoard board, ChessPosition startPos, int spaces)
     {
-        ArrayList<ChessMove> possibleMoves = null;
+        ArrayList<ChessMove> possibleMoves = new ArrayList();
         // 1,1
-        ChessPosition pos = startPos;
+
         //stop when it runs into a piece or edge of board. if piece is opposide color, that space is valid
         int[] vector = {1, 1};
-        ChessGame.TeamColor pieceColor = board.getPiece(startPos).getTeamColor();
+        for (int i = 0; i < 4; i++)
+        {
+            possibleMoves.addAll(checkDirection(board, startPos, vector, spaces));
+            vector = rotate90(vector);
+        }
 
-
-        pos = pos.addPosition(vector);
-
-
-        // 1,-1
-        // -1,-1
-        // -1,1
         return possibleMoves;
     }
 
-    public void checkStraights(ChessBoard board, ChessPosition position)
+    public Collection<ChessMove> checkJumps(ChessBoard board, ChessPosition startPos)
     {
+        int spaces = 1;
+        ArrayList<ChessMove> possibleMoves = new ArrayList();
+        // 1,1
+
+        //stop when it runs into a piece or edge of board. if piece is opposide color, that space is valid
+        int[] vector = {2, 1};
+        for (int i = 0; i < 4; i++)
+        {
+            possibleMoves.addAll(checkDirection(board, startPos, vector, spaces));
+            vector = rotate90(vector);
+        }
+        int[] vector2 = {1, 2};
+        for (int i = 0; i < 4; i++)
+        {
+            possibleMoves.addAll(checkDirection(board, startPos, vector2, spaces));
+            vector2 = rotate90(vector2);
+        }
+
+        return possibleMoves;
+    }
+
+    public Collection<ChessMove> checkStraights(ChessBoard board, ChessPosition position, int spaces)
+    {
+        ArrayList<ChessMove> possibleMoves = new ArrayList();
+        // 1,1
+
+        //stop when it runs into a piece or edge of board. if piece is opposide color, that space is valid
+        int[] vector = {1, 0};
+        for (int i = 0; i < 4; i++)
+        {
+            possibleMoves.addAll(checkDirection(board, position, vector, spaces));
+            vector = rotate90(vector);
+        }
+
+        return possibleMoves;
 
 
     }
@@ -142,35 +202,73 @@ public class ChessPiece
         return x;
     }
 
-    public Collection<ChessMove> checkDirection(ChessBoard board,ChessPosition startPos,int[] vector)
+    public Collection<ChessMove> checkDirection(ChessBoard board, ChessPosition startPos, int[] vector, int spaces)
     {
         ChessPosition pos = startPos;
         ArrayList<ChessMove> possibleMoves = new ArrayList();
         pos = pos.addPosition(vector);
-        while(pos.getColumn() <=8 && pos.getColumn()>= 1&& pos.getRow() <=8 && pos.getRow()>= 1){
+        int count = 0;
+        while (pos.getColumn() <= 8 && pos.getColumn() >= 1 && pos.getRow() <= 8 && pos.getRow() >= 1 && count < spaces)
+        {
             ChessPiece currPiece = board.getPiece(pos);
-            if(currPiece != null)
+            if (currPiece != null)
             {
                 // same color
-                if(currPiece.getTeamColor() == color){
+                if (currPiece.getTeamColor() == color)
+                {
                     return possibleMoves;
                 }
                 // opposite color
-                else{
-                    possibleMoves.add(new ChessMove(startPos,pos));
+                else
+                {
+                    possibleMoves.add(new ChessMove(startPos, pos));
                     return possibleMoves;
 
                 }
-            }
-            else {
-                possibleMoves.add(new ChessMove(startPos,pos));
+            } else
+            {
+                possibleMoves.add(new ChessMove(startPos, pos));
                 pos = pos.addPosition(vector);
             }
-
+            count++;
 
 
         }
         return possibleMoves;
+    }
+
+    // checking the pawns potential moves:
+    //   diagonal if piece of opposite color is there
+    //   straight if no piece is there
+    public Collection<ChessMove> checkPawn(ChessBoard board, ChessPosition position)
+    {
+        ArrayList<ChessMove> possibleMoves = new ArrayList();
+        // 1,1
+
+        //stop when it runs into a piece or edge of board. if piece is opposide color, that space is valid
+        int[] diagonals = {1, -1};
+        for (int i = 0; i < 2; i++)
+        {
+            if(isOpposite(board.getPiece(position.addPosition(diagonals)).getTeamColor())){
+                ChessMove move = new ChessMove(position,position.addPosition(diagonals));
+// if on back rank, set promotion
+                possibleMoves.add(move);
+            }
+
+
+            diagonals = rotate90(diagonals);
+        }
+        int[] ahead = {0,1};
+        if(board.getPiece(position.addPosition(ahead))==null){
+            ChessMove move = new ChessMove(position,position.addPosition(ahead));
+            // if on back rank, set promotion
+            possibleMoves.add(move);
+
+        }
+
+        return possibleMoves;
+
+
     }
 
 

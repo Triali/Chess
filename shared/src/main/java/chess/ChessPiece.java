@@ -97,45 +97,49 @@ public class ChessPiece
         return (color != otherColor);
     }
 
-//    @Override
-//    public String toString()
-//    {
-//        String print;
-//        if (getTeamColor() == ChessGame.TeamColor.WHITE)
-//        {
-//            print = switch (type)
-//            {
+    @Override
+    public String toString()
+    {
+        String print;
+        if (getTeamColor() == ChessGame.TeamColor.WHITE)
+        {
+            print = switch (type)
+            {
 //                case KING -> "\u265A";
 //                case PAWN -> "\u265F";
 //                case ROOK -> "\u265C";
 //                case QUEEN -> "\u265B";
 //                case BISHOP -> "\u265D";
 //                case KNIGHT -> "\u265E";
-//            };
-//        } else
-//        {
-//            print = switch (type)
-//            {
+            case KING -> "K";
+                case PAWN -> "P";
+                case ROOK -> "R";
+                case QUEEN -> "Q";
+                case BISHOP -> "B";
+                case KNIGHT -> "N";
+            };
+        } else
+        {
+            print = switch (type)
+            {
 //                case KING -> "\u2654";
 //                case PAWN -> "\u2659";
 //                case ROOK -> "\u2656";
 //                case QUEEN -> "\u2655";
 //                case BISHOP -> "\u2657";
 //                case KNIGHT -> "\u2658";
-//            };
-//        }
-//        return print;
-//    }
-
-    @Override
-    public String toString()
-    {
-        return "ChessPiece{" +
-                "color=" + color +
-                ", type=" + type +
-                ", hasMoved=" + hasMoved +
-                '}';
+                case KING -> "k";
+                case PAWN -> "p";
+                case ROOK -> "r";
+                case QUEEN -> "q";
+                case BISHOP -> "b";
+                case KNIGHT -> "n";
+            };
+        }
+        return print;
     }
+
+
 
     // checking pieces on diagonals given a distance
     // checking pieces on the straights given a distance

@@ -7,7 +7,8 @@ package chess;
  * signature of the existing methods.
  */
 public class ChessPosition {
-    int row, col, hashCode;
+    int row, col;
+//    int hashCode;
 
     public ChessPosition(int row, int col) {
         this.row = row;
@@ -54,6 +55,7 @@ public class ChessPosition {
 
     @Override
     public int hashCode() {
-        return this.hashCode;
+//        return this.hashCode;
+        return super.hashCode();
     }
 }

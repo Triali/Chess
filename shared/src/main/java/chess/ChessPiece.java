@@ -264,7 +264,6 @@ public class ChessPiece
         if (color == ChessGame.TeamColor.BLACK)
         {
             int[] diagonal = {-1, 1};
-
             int[] ahead = {-1, 0};
             for (int i = 0; i < 2; i++)
             {
@@ -277,28 +276,22 @@ public class ChessPiece
                     {
                         possibleMoves.add(new ChessMove(position, position.addPosition(diagonal)));
                     }
-                    diagonal = rotate90(diagonal);
+
                 }
-
-
+                diagonal = rotate90(diagonal);
             }
-            // check second rank
-
-            //diagonals
-            //ahead
-
             if (board.getPiece(position.addPosition(ahead)) == null)
             {
                 if (position.getRow() == 2)
                 {
                     possibleMoves.addAll(PawnPromote(position, position.addPosition(ahead)));
-                } else if (position.getRow() == 7)
-                {
-                    possibleMoves.addAll(checkDirection(board,position,ahead,2));
-                } else
+                }  else
 
                 {
                     possibleMoves.add(new ChessMove(position, position.addPosition(ahead)));
+                    if (position.getRow() == 7 && board.getPiece(position.addPosition(ahead).addPosition(ahead)) == null){
+                        possibleMoves.add(new ChessMove(position, position.addPosition(ahead).addPosition(ahead)));
+                    }
                 }
             }
 
@@ -325,22 +318,20 @@ public class ChessPiece
 
 
             }
-            // check second rank
-
-            //diagonals
-            //ahead
+            // pawn promotion capture
+            // pawn move forward double
 
             if (board.getPiece(position.addPosition(ahead)) == null)
             {
                 if (position.getRow() == 7)
                 {
                     possibleMoves.addAll(PawnPromote(position, position.addPosition(ahead)));
-                } else if (position.getRow() == 2)
-                {
-                    possibleMoves.addAll(checkDirection(board,position,ahead,2));
-                }else
+                } else
                 {
                     possibleMoves.add(new ChessMove(position, position.addPosition(ahead)));
+                    if (position.getRow() == 7 && board.getPiece(position.addPosition(ahead).addPosition(ahead)) == null){
+                        possibleMoves.add(new ChessMove(position, position.addPosition(ahead).addPosition(ahead)));
+                    }
                 }
             }
 

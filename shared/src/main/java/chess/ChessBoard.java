@@ -47,6 +47,24 @@ public class ChessBoard {
         return pieces.get(position);
     }
 
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return super.equals(obj);
+    }
+
+    @Override
+    public String toString()
+    {
+        return super.toString();
+    }
+
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)

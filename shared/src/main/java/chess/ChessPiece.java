@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 
 /**
@@ -12,8 +13,8 @@ import java.util.Collection;
  */
 public class ChessPiece
 {
-    ChessGame.TeamColor color;
-    ChessPiece.PieceType type;
+    private ChessGame.TeamColor color;
+    private ChessPiece.PieceType type;
 
     // to check eligablitiy for castling
     boolean hasMoved;
@@ -64,7 +65,7 @@ public class ChessPiece
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition)
     {
-        ArrayList<ChessMove> possibleMoves = new ArrayList();
+        HashSet<ChessMove> possibleMoves = new HashSet();
         switch (type)
         {
             case KING:
@@ -72,6 +73,7 @@ public class ChessPiece
                 possibleMoves.addAll(checkStraights(board, myPosition, 1));
                 break;
             case PAWN:
+                possibleMoves.addAll(checkPawn(board,myPosition));
                 break;
             case ROOK:
                 possibleMoves.addAll(checkStraights(board, myPosition, 8));
@@ -131,7 +133,7 @@ public class ChessPiece
 
     public Collection<ChessMove> checkDiagonals(ChessBoard board, ChessPosition startPos, int spaces)
     {
-        ArrayList<ChessMove> possibleMoves = new ArrayList();
+        HashSet<ChessMove> possibleMoves = new HashSet();
         // 1,1
 
         //stop when it runs into a piece or edge of board. if piece is opposide color, that space is valid
@@ -148,7 +150,7 @@ public class ChessPiece
     public Collection<ChessMove> checkJumps(ChessBoard board, ChessPosition startPos)
     {
         int spaces = 1;
-        ArrayList<ChessMove> possibleMoves = new ArrayList();
+        HashSet<ChessMove> possibleMoves = new HashSet();
         // 1,1
 
         //stop when it runs into a piece or edge of board. if piece is opposide color, that space is valid
@@ -170,7 +172,7 @@ public class ChessPiece
 
     public Collection<ChessMove> checkStraights(ChessBoard board, ChessPosition position, int spaces)
     {
-        ArrayList<ChessMove> possibleMoves = new ArrayList();
+        HashSet<ChessMove> possibleMoves = new HashSet();
         // 1,1
 
         //stop when it runs into a piece or edge of board. if piece is opposide color, that space is valid
@@ -195,17 +197,10 @@ public class ChessPiece
         return x;
     }
 
-    public static int[] scalar(int[] x, int scale)
-    {
-        x[0] = x[0] * scale;
-        x[1] = x[1] * scale;
-        return x;
-    }
-
     public Collection<ChessMove> checkDirection(ChessBoard board, ChessPosition startPos, int[] vector, int spaces)
     {
         ChessPosition pos = startPos;
-        ArrayList<ChessMove> possibleMoves = new ArrayList();
+        HashSet<ChessMove> possibleMoves = new HashSet();
         pos = pos.addPosition(vector);
         int count = 0;
         while (pos.getColumn() <= 8 && pos.getColumn() >= 1 && pos.getRow() <= 8 && pos.getRow() >= 1 && count < spaces)
@@ -237,38 +232,115 @@ public class ChessPiece
         return possibleMoves;
     }
 
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return super.equals(obj);
+    }
+
     // checking the pawns potential moves:
     //   diagonal if piece of opposite color is there
     //   straight if no piece is there
     public Collection<ChessMove> checkPawn(ChessBoard board, ChessPosition position)
     {
-        ArrayList<ChessMove> possibleMoves = new ArrayList();
-        // 1,1
-
-        //stop when it runs into a piece or edge of board. if piece is opposide color, that space is valid
-        int[] diagonals = {1, -1};
-        for (int i = 0; i < 2; i++)
+        HashSet<ChessMove> possibleMoves = new HashSet();
+        // Check color
+        if (color == ChessGame.TeamColor.BLACK)
         {
-            if(isOpposite(board.getPiece(position.addPosition(diagonals)).getTeamColor())){
-                ChessMove move = new ChessMove(position,position.addPosition(diagonals));
-// if on back rank, set promotion
-                possibleMoves.add(move);
+            int[] diagonal = {-1, 1};
+
+            int[] ahead = {-1, 0};
+            for (int i = 0; i < 2; i++)
+            {
+                if (board.getPiece(position.addPosition(diagonal)) != null && isOpposite(board.getPiece(position.addPosition(diagonal)).getTeamColor()))
+                {
+                    if (position.getRow() == 2)
+                    {
+                        possibleMoves.addAll(PawnPromote(position, position.addPosition(diagonal)));
+                    } else
+                    {
+                        possibleMoves.add(new ChessMove(position, position.addPosition(diagonal)));
+                    }
+                    diagonal = rotate90(diagonal);
+                }
+
+
+            }
+            // check second rank
+
+            //diagonals
+            //ahead
+
+            if (board.getPiece(position.addPosition(ahead)) == null)
+            {
+                if (position.getRow() == 2)
+                {
+                    possibleMoves.addAll(PawnPromote(position, position.addPosition(ahead)));
+                } else
+                {
+                    possibleMoves.add(new ChessMove(position, position.addPosition(ahead)));
+                }
             }
 
+        } else
+        {
+            int[] diagonal = {1, -1};
 
-            diagonals = rotate90(diagonals);
-        }
-        int[] ahead = {0,1};
-        if(board.getPiece(position.addPosition(ahead))==null){
-            ChessMove move = new ChessMove(position,position.addPosition(ahead));
-            // if on back rank, set promotion
-            possibleMoves.add(move);
+            int[] ahead = {1, 0};
+            for (int i = 0; i < 2; i++)
+            {
+                if (board.getPiece(position.addPosition(diagonal)) != null &&
+                        isOpposite(board.getPiece(position.addPosition(diagonal)).getTeamColor()))
+                {
+                    if (position.getRow() == 7)
+                    {
+                        possibleMoves.addAll(PawnPromote(position, position.addPosition(diagonal)));
+                    } else
+                    {
+                        possibleMoves.add(new ChessMove(position, position.addPosition(diagonal)));
+                    }
+
+                }
+                diagonal = rotate90(diagonal);
+
+
+            }
+            // check second rank
+
+            //diagonals
+            //ahead
+
+            if (board.getPiece(position.addPosition(ahead)) == null)
+            {
+                if (position.getRow() == 7)
+                {
+                    possibleMoves.addAll(PawnPromote(position, position.addPosition(ahead)));
+                } else
+                {
+                    possibleMoves.add(new ChessMove(position, position.addPosition(ahead)));
+                }
+            }
 
         }
+
 
         return possibleMoves;
+    }
 
-
+    Collection<ChessMove> PawnPromote(ChessPosition start, ChessPosition end)
+    {
+        HashSet<ChessMove> possibleMoves = new HashSet();
+        possibleMoves.add(new ChessMove(start, end, PieceType.BISHOP));
+        possibleMoves.add(new ChessMove(start, end, PieceType.QUEEN));
+        possibleMoves.add(new ChessMove(start, end, PieceType.ROOK));
+        possibleMoves.add(new ChessMove(start, end, PieceType.KNIGHT));
+        return possibleMoves;
     }
 
 

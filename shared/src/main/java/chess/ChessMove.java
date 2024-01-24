@@ -43,6 +43,23 @@ public class ChessMove
         return end;
     }
 
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return super.equals(obj);
+    }
+
+    public void setPromotionPiece(ChessPiece.PieceType promotionPiece)
+    {
+        this.promotionPiece = promotionPiece;
+    }
+
     /**
      * Gets the type of piece to promote a pawn to if pawn promotion is part of this
      * chess move
@@ -57,8 +74,8 @@ public class ChessMove
     @Override
     public String toString()
     {
-//        return start.toString() + "-> " + end.toString() + ((this.promotionPiece == null)?(""):(": " + this.promotionPiece));
-return end.toString();
+        return "{" + end +
+                ", " + promotionPiece +
+                '}';
     }
-
 };

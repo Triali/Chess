@@ -41,7 +41,6 @@ public class ChessPosition {
     public ChessPosition addPosition(int[] toAdd)
     {
         return new ChessPosition(row +toAdd[0],col +toAdd[1]);
-
     }
 
     @Override

@@ -48,21 +48,26 @@ public class ChessBoard {
     }
 
     @Override
-    public int hashCode()
+    public boolean equals(Object o)
     {
-        return super.hashCode();
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessBoard board = (ChessBoard) o;
+        return Objects.equals(pieces, board.pieces);
     }
 
     @Override
-    public boolean equals(Object obj)
+    public int hashCode()
     {
-        return super.equals(obj);
+        return Objects.hash(pieces);
     }
 
     @Override
     public String toString()
     {
-        return super.toString();
+        return "ChessBoard{" +
+                "pieces=" + pieces +
+                '}';
     }
 
     /**

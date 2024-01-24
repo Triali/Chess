@@ -3,6 +3,7 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Objects;
 
 
 /**
@@ -247,15 +248,18 @@ public class ChessPiece
     }
 
     @Override
-    public int hashCode()
+    public boolean equals(Object o)
     {
-        return super.hashCode();
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChessPiece that = (ChessPiece) o;
+        return hasMoved == that.hasMoved && color == that.color && type == that.type;
     }
 
     @Override
-    public boolean equals(Object obj)
+    public int hashCode()
     {
-        return super.equals(obj);
+        return Objects.hash(color, type, hasMoved);
     }
 
     // checking the pawns potential moves:

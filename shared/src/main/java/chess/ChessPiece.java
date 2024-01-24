@@ -337,7 +337,7 @@ public class ChessPiece
                 } else
                 {
                     possibleMoves.add(new ChessMove(position, position.addPosition(ahead)));
-                    if (position.getRow() == 7 && board.getPiece(position.addPosition(ahead).addPosition(ahead)) == null){
+                    if (position.getRow() == 2 && board.getPiece(position.addPosition(ahead).addPosition(ahead)) == null){
                         possibleMoves.add(new ChessMove(position, position.addPosition(ahead).addPosition(ahead)));
                     }
                 }

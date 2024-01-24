@@ -106,40 +106,39 @@ public class ChessPiece
         {
             print = switch (type)
             {
-//                case KING -> "\u265A";
-//                case PAWN -> "\u265F";
-//                case ROOK -> "\u265C";
-//                case QUEEN -> "\u265B";
-//                case BISHOP -> "\u265D";
-//                case KNIGHT -> "\u265E";
-            case KING -> "K";
-                case PAWN -> "P";
-                case ROOK -> "R";
-                case QUEEN -> "Q";
-                case BISHOP -> "B";
-                case KNIGHT -> "N";
+                case KING -> "\u265A";
+                case PAWN -> "\u265F";
+                case ROOK -> "\u265C";
+                case QUEEN -> "\u265B";
+                case BISHOP -> "\u265D";
+                case KNIGHT -> "\u265E";
+//            case KING -> "K";
+//                case PAWN -> "P";
+//                case ROOK -> "R";
+//                case QUEEN -> "Q";
+//                case BISHOP -> "B";
+//                case KNIGHT -> "N";
             };
         } else
         {
             print = switch (type)
             {
-//                case KING -> "\u2654";
-//                case PAWN -> "\u2659";
-//                case ROOK -> "\u2656";
-//                case QUEEN -> "\u2655";
-//                case BISHOP -> "\u2657";
-//                case KNIGHT -> "\u2658";
-                case KING -> "k";
-                case PAWN -> "p";
-                case ROOK -> "r";
-                case QUEEN -> "q";
-                case BISHOP -> "b";
-                case KNIGHT -> "n";
+                case KING -> "\u2654";
+                case PAWN -> "\u2659";
+                case ROOK -> "\u2656";
+                case QUEEN -> "\u2655";
+                case BISHOP -> "\u2657";
+                case KNIGHT -> "\u2658";
+//                case KING -> "k";
+//                case PAWN -> "p";
+//                case ROOK -> "r";
+//                case QUEEN -> "q";
+//                case BISHOP -> "b";
+//                case KNIGHT -> "n";
             };
         }
         return print;
     }
-
 
 
     // checking pieces on diagonals given a distance
@@ -269,80 +268,55 @@ public class ChessPiece
     {
         HashSet<ChessMove> possibleMoves = new HashSet();
         // Check color
+        int[] diagonal;
+        int[] ahead;
+        int backRow;
+        int startRow;
         if (color == ChessGame.TeamColor.BLACK)
         {
-            int[] diagonal = {-1, 1};
-            int[] ahead = {-1, 0};
-            for (int i = 0; i < 2; i++)
-            {
-                if (board.getPiece(position.addPosition(diagonal)) != null && isOpposite(board.getPiece(position.addPosition(diagonal)).getTeamColor()))
-                {
-                    if (position.getRow() == 2)
-                    {
-                        possibleMoves.addAll(PawnPromote(position, position.addPosition(diagonal)));
-                    } else
-                    {
-                        possibleMoves.add(new ChessMove(position, position.addPosition(diagonal)));
-                    }
-
-                }
-                diagonal = rotate90(diagonal);
-            }
-            if (board.getPiece(position.addPosition(ahead)) == null)
-            {
-                if (position.getRow() == 2)
-                {
-                    possibleMoves.addAll(PawnPromote(position, position.addPosition(ahead)));
-                }  else
-
-                {
-                    possibleMoves.add(new ChessMove(position, position.addPosition(ahead)));
-                    if (position.getRow() == 7 && board.getPiece(position.addPosition(ahead).addPosition(ahead)) == null){
-                        possibleMoves.add(new ChessMove(position, position.addPosition(ahead).addPosition(ahead)));
-                    }
-                }
-            }
-
+            diagonal = new int[]{-1, 1};
+            ahead = new int[]{-1, 0};
+            backRow = 2;
+            startRow = 7;
         } else
         {
-            int[] diagonal = {1, -1};
-
-            int[] ahead = {1, 0};
-            for (int i = 0; i < 2; i++)
+            diagonal = new int[]{1, -1};
+            ahead = new int[]{1, 0};
+            backRow = 7;
+            startRow = 2;
+        }
+        // diagonals
+        for (int i = 0; i < 2; i++)
+        {
+            ChessPosition next = position.addPosition(diagonal);
+            if (board.getPiece(next)!=null && isOpposite(board.getPiece(next).getTeamColor()))
             {
-                if (board.getPiece(position.addPosition(diagonal)) != null &&
-                        isOpposite(board.getPiece(position.addPosition(diagonal)).getTeamColor()))
+                if (position.getRow() == backRow)
                 {
-                    if (position.getRow() == 7)
-                    {
-                        possibleMoves.addAll(PawnPromote(position, position.addPosition(diagonal)));
-                    } else
-                    {
-                        possibleMoves.add(new ChessMove(position, position.addPosition(diagonal)));
-                    }
-
-                }
-                diagonal = rotate90(diagonal);
-
-
-            }
-            // pawn promotion capture
-            // pawn move forward double
-
-            if (board.getPiece(position.addPosition(ahead)) == null)
-            {
-                if (position.getRow() == 7)
-                {
-                    possibleMoves.addAll(PawnPromote(position, position.addPosition(ahead)));
+                    possibleMoves.addAll(PawnPromote(position, next));
                 } else
                 {
-                    possibleMoves.add(new ChessMove(position, position.addPosition(ahead)));
-                    if (position.getRow() == 2 && board.getPiece(position.addPosition(ahead).addPosition(ahead)) == null){
-                        possibleMoves.add(new ChessMove(position, position.addPosition(ahead).addPosition(ahead)));
-                    }
+                    possibleMoves.add(new ChessMove(position, next));
                 }
             }
+            diagonal = rotate90(diagonal);
+        }
+//        ahead
+        ChessPosition next = position.addPosition(ahead);
+        if (board.getPiece(next) == null)
+        {
+            if (position.getRow() == backRow)
+            {
+                possibleMoves.addAll(PawnPromote(position, next));
+            } else
+            {
+                if (position.getRow() == startRow && board.getPiece(next.addPosition(ahead)) == null)
+                {
+                    possibleMoves.add(new ChessMove(position, next.addPosition(ahead)));
+                }
+                possibleMoves.add(new ChessMove(position, next));
 
+            }
         }
 
 

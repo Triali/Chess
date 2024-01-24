@@ -73,7 +73,7 @@ public class ChessPiece
                 possibleMoves.addAll(checkStraights(board, myPosition, 1));
                 break;
             case PAWN:
-                possibleMoves.addAll(checkPawn(board,myPosition));
+                possibleMoves.addAll(checkPawn(board, myPosition));
                 break;
             case ROOK:
                 possibleMoves.addAll(checkStraights(board, myPosition, 8));
@@ -97,34 +97,44 @@ public class ChessPiece
         return (color != otherColor);
     }
 
+//    @Override
+//    public String toString()
+//    {
+//        String print;
+//        if (getTeamColor() == ChessGame.TeamColor.WHITE)
+//        {
+//            print = switch (type)
+//            {
+//                case KING -> "\u265A";
+//                case PAWN -> "\u265F";
+//                case ROOK -> "\u265C";
+//                case QUEEN -> "\u265B";
+//                case BISHOP -> "\u265D";
+//                case KNIGHT -> "\u265E";
+//            };
+//        } else
+//        {
+//            print = switch (type)
+//            {
+//                case KING -> "\u2654";
+//                case PAWN -> "\u2659";
+//                case ROOK -> "\u2656";
+//                case QUEEN -> "\u2655";
+//                case BISHOP -> "\u2657";
+//                case KNIGHT -> "\u2658";
+//            };
+//        }
+//        return print;
+//    }
+
     @Override
     public String toString()
     {
-        String print;
-        if (getTeamColor() == ChessGame.TeamColor.WHITE)
-        {
-            print = switch (type)
-            {
-                case KING -> "\u265A";
-                case PAWN -> "\u265F";
-                case ROOK -> "\u265C";
-                case QUEEN -> "\u265B";
-                case BISHOP -> "\u265D";
-                case KNIGHT -> "\u265E";
-            };
-        } else
-        {
-            print = switch (type)
-            {
-                case KING -> "\u2654";
-                case PAWN -> "\u2659";
-                case ROOK -> "\u2656";
-                case QUEEN -> "\u2655";
-                case BISHOP -> "\u2657";
-                case KNIGHT -> "\u2658";
-            };
-        }
-        return print;
+        return "ChessPiece{" +
+                "color=" + color +
+                ", type=" + type +
+                ", hasMoved=" + hasMoved +
+                '}';
     }
 
     // checking pieces on diagonals given a distance
@@ -282,7 +292,11 @@ public class ChessPiece
                 if (position.getRow() == 2)
                 {
                     possibleMoves.addAll(PawnPromote(position, position.addPosition(ahead)));
+                } else if (position.getRow() == 7)
+                {
+                    possibleMoves.addAll(checkDirection(board,position,ahead,2));
                 } else
+
                 {
                     possibleMoves.add(new ChessMove(position, position.addPosition(ahead)));
                 }
@@ -321,7 +335,10 @@ public class ChessPiece
                 if (position.getRow() == 7)
                 {
                     possibleMoves.addAll(PawnPromote(position, position.addPosition(ahead)));
-                } else
+                } else if (position.getRow() == 2)
+                {
+                    possibleMoves.addAll(checkDirection(board,position,ahead,2));
+                }else
                 {
                     possibleMoves.add(new ChessMove(position, position.addPosition(ahead)));
                 }

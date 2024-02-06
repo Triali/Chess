@@ -27,7 +27,7 @@ public class Testing {
 
         board.addPiece(new ChessPosition(5,4),King);
         board.addPiece(new ChessPosition(8,4), rook);
-        board.addPiece(new ChessPosition(8,7), bishop);
+        board.addPiece(new ChessPosition(8,7), queen);
         board.addPiece(new ChessPosition(6,3), pawn);
         board.addPiece(new ChessPosition(7,3), knight);
         board.addPiece(new ChessPosition(5,1), queen);
@@ -41,29 +41,9 @@ public class Testing {
 
         board.printBoard();
         int[] dir = new int[]{0,-1};
-        System.out.println(game.CheckForAttack(game.getWhiteKing(),dir,8));
+        System.out.println(game.CheckJumps(game.getWhiteKing()));
 
 
-
-
-
-
-
-
-//        x= rotate90(x);
-
-//
-//        System.out.println("(" + x+","+y+")");
-//        x = b*-1;
-//        y = a;
-//        a = x;
-//        b = y;
-//        System.out.println("(" + x+","+y+")");
-//        x = b*-1;
-//        y = a;
-//        a = x;
-//        b = y;
-//        System.out.println("(" + x+","+y+")");
 
 
 

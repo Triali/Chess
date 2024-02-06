@@ -131,7 +131,8 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        ChessPosition pos = (teamColor == TeamColor.WHITE)?(getWhiteKing()):(getBlackKing());
+        return (CheckDiagonal(pos) || CheckJumps(pos) || CheckPawns(pos) || CheckStraight(pos));
     }
 
     /**
@@ -185,7 +186,7 @@ public class ChessGame {
      * @param spaces the number of spaces to check for
      *
      */
-    public ChessPiece.PieceType CheckForAttack(ChessPosition startPos, int[] vector, int spaces)
+    private ChessPiece.PieceType CheckForAttack(ChessPosition startPos, int[] vector, int spaces)
     {
         ChessPosition pos = startPos;
         TeamColor color = currentGame.getPiece(pos).getTeamColor();
@@ -215,5 +216,64 @@ public class ChessGame {
         }
         return null;
 
+    }
+    public Boolean CheckDiagonal(ChessPosition startPos){
+        int[] dir = new int[]{1,-1};
+        for (int i = 0; i < 4; i++)
+        {
+            if(CheckForAttack(startPos,dir,8)== ChessPiece.PieceType.BISHOP || CheckForAttack(startPos,dir,8)== ChessPiece.PieceType.QUEEN){
+                return true;
+            }
+            dir = rotate90(dir);
+        }
+        return false;
+    }
+    public Boolean CheckStraight(ChessPosition startPos){
+        int[] dir = new int[]{1,0};
+        for (int i = 0; i < 4; i++)
+        {
+            if(CheckForAttack(startPos,dir,8)== ChessPiece.PieceType.ROOK || CheckForAttack(startPos,dir,8)== ChessPiece.PieceType.QUEEN){
+                return true;
+            }
+            dir = rotate90(dir);
+        }
+        return false;
+    }
+    public Boolean CheckJumps(ChessPosition startPos){
+        int[] dir = new int[]{1,2};
+        for (int i = 0; i < 4; i++)
+        {
+            if(CheckForAttack(startPos,dir,1)== ChessPiece.PieceType.KNIGHT){
+                return true;
+            }
+            dir = rotate90(dir);
+        }
+        int[] dir2 = new int[]{1,-2};
+        for (int i = 0; i < 4; i++)
+        {
+            if(CheckForAttack(startPos,dir2,1)== ChessPiece.PieceType.KNIGHT){
+                return true;
+            }
+            dir2 = rotate90(dir2);
+        }
+        return false;
+    }
+    public Boolean CheckPawns(ChessPosition startPos){
+        TeamColor color = currentGame.getPiece(startPos).getTeamColor();
+        int row = (color == TeamColor.WHITE)?(1):(-1);
+        int col = 1;
+        if((currentGame.getPiece(startPos.addPosition(new int[]{row,col})).getPieceType()== ChessPiece.PieceType.PAWN)
+        ||(currentGame.getPiece(startPos.addPosition(new int[]{row,-col})).getPieceType()== ChessPiece.PieceType.PAWN)){
+            return true;
+        }
+        return false;
+    }
+    private static int[] rotate90(int[] x)
+    {
+        int a = x[0];
+        int b = x[1];
+        x[0] = b * -1;
+        x[1] = a;
+        return x;
     }
 }

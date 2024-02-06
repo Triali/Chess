@@ -333,5 +333,13 @@ public class ChessPiece
         return possibleMoves;
     }
 
+    Collection<ChessMove> CheckAttacks(ChessPosition start){
+        HashSet<ChessMove> possibleMoves = new HashSet();
+
+
+        return possibleMoves;
+    }
+
+
 
 }

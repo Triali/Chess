@@ -27,6 +27,13 @@ public class ChessGame {
 
     }
 
+    public ChessGame(ChessBoard board,TeamColor currentTurn){
+        currentGame = board;
+        this.currentTurn = currentTurn;
+        FindKings();
+    }
+
+
     /**
      * @return Which team's turn it is
      */
@@ -89,15 +96,18 @@ public class ChessGame {
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
 //        System.out.println("running validMoves");
         Collection<ChessMove> validMoves = new HashSet<>();
+        Collection<ChessMove> possibleMoves = new HashSet<>();
         ChessPiece piece = currentGame.getPiece(startPosition);
         if(piece == null)
         {
             return validMoves;
         }
 
-        validMoves.addAll( piece.pieceMoves(currentGame,startPosition));
-        for (ChessMove move:validMoves)
+        possibleMoves.addAll( piece.pieceMoves(currentGame,startPosition));
+//        System.out.println(possibleMoves);
+        for (ChessMove move:possibleMoves)
         {
+//            System.out.println(move +" "+tryMove(move));
            if( tryMove(move)){
                validMoves.add(move);
            }
@@ -219,7 +229,7 @@ public class ChessGame {
         FindKings();
 //        System.out.println("running isInCheck");
         ChessPosition pos = (teamColor == TeamColor.WHITE)?(getWhiteKing()):(getBlackKing());
-        return (CheckDiagonal(pos) || CheckJumps(pos) || CheckPawns(pos) || CheckStraight(pos));
+        return (CheckDiagonal(pos) || CheckJumps(pos) || CheckPawns(pos) || CheckStraight(pos) || CheckKing(pos));
     }
 
     /**
@@ -310,6 +320,28 @@ public class ChessGame {
             return null;
         }
         return null;
+
+    }
+
+    public Boolean CheckKing(ChessPosition startPos){
+        int[] dir = new int[]{1,-1};
+        for (int i = 0; i < 4; i++)
+        {
+            if(CheckForAttack(startPos,dir,1)== ChessPiece.PieceType.KING ){
+                return true;
+            }
+            dir = rotate90(dir);
+        }
+        dir = new int[]{1,0};
+        for (int i = 0; i < 4; i++)
+        {
+            if(CheckForAttack(startPos,dir,8)== ChessPiece.PieceType.KING){
+                return true;
+            }
+            dir = rotate90(dir);
+        }
+        return false;
+
 
     }
     public Boolean CheckDiagonal(ChessPosition startPos){

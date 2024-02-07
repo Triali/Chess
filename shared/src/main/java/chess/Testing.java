@@ -25,38 +25,38 @@ public class Testing {
         ChessPiece king = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
 
 
-        board.addPiece(new ChessPosition(2,3),King);
-//        board.addPiece(new ChessPosition(2,3), Bishop);
-        board.addPiece(new ChessPosition(6,3), rook);
-//        board.addPiece(new ChessPosition(7,8), queen);
-        board.addPiece(new ChessPosition(8,8), knight);
-//        board.addPiece(new ChessPosition(6,7), pawn);
+        board.addPiece(new ChessPosition(2,6),King);
+//        board.addPiece(new ChessPosition(6,2), Bishop);
+//        board.addPiece(new ChessPosition(6,6), rook);
+//        board.addPiece(new ChessPosition(2,4), queen);
+//        board.addPiece(new ChessPosition(4,3), knight);
+        board.addPiece(new ChessPosition(4,6), king);
 
-        ChessGame game = new ChessGame();
-        game.setBoard(board);
+        ChessGame game = new ChessGame(board, ChessGame.TeamColor.WHITE);
+
 
 
 
 
 
         board.printBoard();
-        System.out.println(game.CheckStraight(new ChessPosition(2,3)));
-        System.out.println(game.isInCheck(ChessGame.TeamColor.WHITE));
+//        System.out.println(game.CheckStraight(new ChessPosition(2,6)));
+//        System.out.println(game.isInCheck(ChessGame.TeamColor.WHITE));
 //        int[] dir = new int[]{0,-1};
-        System.out.println(game.validMoves(new ChessPosition(2,3)));
-        try
-        {
-
-            game.makeMove(new ChessMove(new ChessPosition(2, 3), new ChessPosition(2, 2)));
-
-            System.out.println("moving King");
-            board.printBoard();
-
-            System.out.println(game.getTeamTurn());
-        }catch (Exception e)
-        {
-
-        }
+        System.out.println(game.validMoves(new ChessPosition(2,6)));
+//        try
+//        {
+//
+//            game.makeMove(new ChessMove(new ChessPosition(2, 3), new ChessPosition(2, 2)));
+//
+//            System.out.println("moving King");
+//            board.printBoard();
+//
+//            System.out.println(game.getTeamTurn());
+//        }catch (Exception e)
+//        {
+//
+//        }
 
 
 

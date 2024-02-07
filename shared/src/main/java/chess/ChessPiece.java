@@ -18,7 +18,7 @@ public class ChessPiece
     private ChessPiece.PieceType type;
 
     // to check eligablitiy for castling
-    boolean hasMoved;
+    private boolean hasMoved;
 
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType pieceType)
@@ -145,7 +145,7 @@ public class ChessPiece
     // checking pieces on the straights given a distance
     // checking pieces on the kights jumps
 
-    public Collection<ChessMove> checkDiagonals(ChessBoard board, ChessPosition startPos, int spaces)
+    private Collection<ChessMove> checkDiagonals(ChessBoard board, ChessPosition startPos, int spaces)
     {
         HashSet<ChessMove> possibleMoves = new HashSet();
         // 1,1
@@ -161,7 +161,7 @@ public class ChessPiece
         return possibleMoves;
     }
 
-    public Collection<ChessMove> checkJumps(ChessBoard board, ChessPosition startPos)
+    private Collection<ChessMove> checkJumps(ChessBoard board, ChessPosition startPos)
     {
         int spaces = 1;
         HashSet<ChessMove> possibleMoves = new HashSet();
@@ -184,7 +184,7 @@ public class ChessPiece
         return possibleMoves;
     }
 
-    public Collection<ChessMove> checkStraights(ChessBoard board, ChessPosition position, int spaces)
+    private Collection<ChessMove> checkStraights(ChessBoard board, ChessPosition position, int spaces)
     {
         HashSet<ChessMove> possibleMoves = new HashSet();
         // 1,1
@@ -202,7 +202,7 @@ public class ChessPiece
 
     }
 
-    public static int[] rotate90(int[] x)
+    private static int[] rotate90(int[] x)
     {
         int a = x[0];
         int b = x[1];
@@ -211,7 +211,7 @@ public class ChessPiece
         return x;
     }
 
-    public Collection<ChessMove> checkDirection(ChessBoard board, ChessPosition startPos, int[] vector, int spaces)
+    private Collection<ChessMove> checkDirection(ChessBoard board, ChessPosition startPos, int[] vector, int spaces)
     {
         ChessPosition pos = startPos;
         HashSet<ChessMove> possibleMoves = new HashSet();
@@ -264,7 +264,7 @@ public class ChessPiece
     // checking the pawns potential moves:
     //   diagonal if piece of opposite color is there
     //   straight if no piece is there
-    public Collection<ChessMove> checkPawn(ChessBoard board, ChessPosition position)
+    private Collection<ChessMove> checkPawn(ChessBoard board, ChessPosition position)
     {
         HashSet<ChessMove> possibleMoves = new HashSet();
         // Check color
@@ -323,7 +323,7 @@ public class ChessPiece
         return possibleMoves;
     }
 
-    Collection<ChessMove> PawnPromote(ChessPosition start, ChessPosition end)
+    private Collection<ChessMove> PawnPromote(ChessPosition start, ChessPosition end)
     {
         HashSet<ChessMove> possibleMoves = new HashSet();
         possibleMoves.add(new ChessMove(start, end, PieceType.BISHOP));
@@ -333,7 +333,7 @@ public class ChessPiece
         return possibleMoves;
     }
 
-    Collection<ChessMove> CheckAttacks(ChessPosition start){
+    private Collection<ChessMove> CheckAttacks(ChessPosition start){
         HashSet<ChessMove> possibleMoves = new HashSet();
 
 

@@ -9,7 +9,7 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessPosition {
-    int row, col;
+    private int row, col;
 //    int hashCode;
 
     public ChessPosition(int row, int col) {

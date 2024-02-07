@@ -83,7 +83,37 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+//        HashSet<ChessMove> validMoves = new HashSet();
+        ChessPiece piece = currentGame.getPiece(startPosition);
+        Collection<ChessMove> validMoves = piece.pieceMoves(currentGame,startPosition);
+        for (ChessMove move:validMoves)
+        {
+           if( tryMove(move)){
+               validMoves.add(move);
+           }
+        }
+
+        return validMoves;
+    }
+
+    private boolean tryMove(ChessMove move){
+        ChessPiece pieceStart = currentGame.getPiece(move.getStartPosition());
+        ChessPiece pieceEnd = currentGame.getPiece(move.getEndPosition());
+        ChessGame.TeamColor color = pieceStart.getTeamColor();
+        boolean isPossible = true;
+
+        currentGame.removePiece(move.getStartPosition());
+        currentGame.addPiece(move.getEndPosition(), pieceStart);
+        if(isInCheck(color))
+        {
+
+            isPossible =  false;
+        }
+        currentGame.removePiece(move.getEndPosition());
+        currentGame.addPiece(move.getStartPosition(), pieceStart);
+        currentGame.addPiece(move.getEndPosition(), pieceEnd);
+        return isPossible;
+
     }
 
     /**
@@ -95,13 +125,22 @@ public class ChessGame {
     public void makeMove(ChessMove move) throws InvalidMoveException {
         ChessPiece piece = currentGame.getPiece(move.getStartPosition());
         // check if it is a valid move
-        currentGame.removePiece(move.getStartPosition());
-        currentGame.addPiece(move.getEndPosition(),piece);
-        if(piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == TeamColor.BLACK ){
-            blackKing = move.getEndPosition();
-        }else if(piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == TeamColor.WHITE ){
-            whiteKing = move.getEndPosition();
+        Collection<ChessMove> moves = validMoves(move.getStartPosition());
+        if(moves.contains(move))
+        {
+            currentGame.removePiece(move.getStartPosition());
+            currentGame.addPiece(move.getEndPosition(), piece);
+            if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == TeamColor.BLACK)
+            {
+                blackKing = move.getEndPosition();
+            } else if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == TeamColor.WHITE)
+            {
+                whiteKing = move.getEndPosition();
+            }
+        }else {
+            throw new InvalidMoveException();
         }
+
     }
 
     public ChessPosition getBlackKing()

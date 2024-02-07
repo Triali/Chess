@@ -39,9 +39,10 @@ public class Testing {
 
 
 
+
         board.printBoard();
         int[] dir = new int[]{0,-1};
-        System.out.println(game.CheckJumps(game.getWhiteKing()));
+        System.out.println(game.isInCheck(ChessGame.TeamColor.WHITE));
 
 
 

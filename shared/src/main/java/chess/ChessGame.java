@@ -167,6 +167,11 @@ public class ChessGame {
         Collection<ChessMove> moves = validMoves(move.getStartPosition());
         System.out.println(move);
         System.out.println(moves);
+        ChessPiece.PieceType promotion = move.getPromotionPiece();
+
+        if(promotion != null){
+            piece.setType(promotion);
+        }
         if(piece.getTeamColor() != currentTurn){
             throw new InvalidMoveException();
         }

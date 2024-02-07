@@ -15,6 +15,12 @@ import java.util.Objects;
 public class ChessPiece
 {
     private ChessGame.TeamColor color;
+
+    public void setType(PieceType type)
+    {
+        this.type = type;
+    }
+
     private ChessPiece.PieceType type;
 
     // to check eligablitiy for castling

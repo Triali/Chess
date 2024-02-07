@@ -336,7 +336,7 @@ public class ChessGame {
         dir = new int[]{1,0};
         for (int i = 0; i < 4; i++)
         {
-            if(CheckForAttack(startPos,dir,8)== ChessPiece.PieceType.KING){
+            if(CheckForAttack(startPos,dir,1)== ChessPiece.PieceType.KING){
                 return true;
             }
             dir = rotate90(dir);

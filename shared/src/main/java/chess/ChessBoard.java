@@ -124,6 +124,7 @@ public class ChessBoard {
                 if(currPiece == null)
                 {
                     System.out.print("|\u00A0\u2008\u2008");
+//                    System.out.println("| ");
                 }
                 else{
                     System.out.print("|");

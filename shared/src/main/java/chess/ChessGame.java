@@ -140,6 +140,7 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
+        FindKings();
 //        System.out.println("running makeMove");
         ChessPiece piece = currentGame.getPiece(move.getStartPosition());
         // check if it is a valid move
@@ -173,6 +174,21 @@ public class ChessGame {
         this.blackKing = blackKing;
     }
 
+    public void FindKings(){
+        for(Map.Entry<ChessPosition,ChessPiece> entry:currentGame.getPieces().entrySet()){
+            if(entry.getValue().getPieceType()==ChessPiece.PieceType.KING){
+                if(entry.getValue().getTeamColor() ==TeamColor.WHITE){
+                    whiteKing = entry.getKey();
+                }
+                {
+                    blackKing = entry.getKey();
+                }
+
+            }
+        }
+
+    }
+
     public void setWhiteKing(ChessPosition whiteKing)
     {
         this.whiteKing = whiteKing;
@@ -190,6 +206,7 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
+        FindKings();
 //        System.out.println("running isInCheck");
         ChessPosition pos = (teamColor == TeamColor.WHITE)?(getWhiteKing()):(getBlackKing());
         return (CheckDiagonal(pos) || CheckJumps(pos) || CheckPawns(pos) || CheckStraight(pos));
@@ -248,7 +265,7 @@ public class ChessGame {
      * @param spaces the number of spaces to check for
      *
      */
-    private ChessPiece.PieceType CheckForAttack(ChessPosition startPos, int[] vector, int spaces)
+    public ChessPiece.PieceType CheckForAttack(ChessPosition startPos, int[] vector, int spaces)
     {
 //        System.out.println("running CheckForAttack");
         ChessPosition pos = startPos;

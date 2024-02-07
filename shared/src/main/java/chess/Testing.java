@@ -43,20 +43,20 @@ public class Testing {
         System.out.println(game.CheckStraight(new ChessPosition(2,3)));
         System.out.println(game.isInCheck(ChessGame.TeamColor.WHITE));
 //        int[] dir = new int[]{0,-1};
-//        System.out.println(game.validMoves(new ChessPosition(1,2)));
-//        try
-//        {
-//
-//            game.makeMove(new ChessMove(new ChessPosition(1, 2), new ChessPosition(1, 1)));
-//
-//            System.out.println("moving King");
-//            board.printBoard();
-//
-//            System.out.println(game.getTeamTurn());
-//        }catch (Exception e)
-//        {
-//
-//        }
+        System.out.println(game.validMoves(new ChessPosition(2,3)));
+        try
+        {
+
+            game.makeMove(new ChessMove(new ChessPosition(2, 3), new ChessPosition(2, 2)));
+
+            System.out.println("moving King");
+            board.printBoard();
+
+            System.out.println(game.getTeamTurn());
+        }catch (Exception e)
+        {
+
+        }
 
 
 

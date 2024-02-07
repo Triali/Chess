@@ -88,14 +88,21 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
 //        System.out.println("running validMoves");
+        Collection<ChessMove> validMoves = new HashSet<>();
         ChessPiece piece = currentGame.getPiece(startPosition);
-        Collection<ChessMove> validMoves = piece.pieceMoves(currentGame,startPosition);
+        if(piece == null)
+        {
+            return validMoves;
+        }
+
+        validMoves.addAll( piece.pieceMoves(currentGame,startPosition));
         for (ChessMove move:validMoves)
         {
            if( tryMove(move)){
                validMoves.add(move);
            }
         }
+
 
         return validMoves;
     }
@@ -176,11 +183,14 @@ public class ChessGame {
 
     public void FindKings(){
         for(Map.Entry<ChessPosition,ChessPiece> entry:currentGame.getPieces().entrySet()){
-            if(entry.getValue().getPieceType()==ChessPiece.PieceType.KING){
+            if(entry.getValue()==null){
+
+            }
+            else if(entry.getValue().getPieceType()==ChessPiece.PieceType.KING){
                 if(entry.getValue().getTeamColor() ==TeamColor.WHITE){
                     whiteKing = entry.getKey();
                 }
-                {
+                else if(entry.getValue().getTeamColor() ==TeamColor.BLACK){
                     blackKing = entry.getKey();
                 }
 

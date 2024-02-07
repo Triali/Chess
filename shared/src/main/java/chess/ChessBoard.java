@@ -111,6 +111,11 @@ public class ChessBoard {
 
     }
 
+    public Map<ChessPosition, ChessPiece> getPieces()
+    {
+        return pieces;
+    }
+
     public void printBoard(){
         for (int row = 8; row >=1 ; row--) {
 

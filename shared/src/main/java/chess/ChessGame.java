@@ -2,6 +2,7 @@ package chess;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -83,7 +84,6 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-//        HashSet<ChessMove> validMoves = new HashSet();
         ChessPiece piece = currentGame.getPiece(startPosition);
         Collection<ChessMove> validMoves = piece.pieceMoves(currentGame,startPosition);
         for (ChessMove move:validMoves)
@@ -94,6 +94,17 @@ public class ChessGame {
         }
 
         return validMoves;
+    }
+
+
+    private Collection<ChessMove> AllValidMoves(TeamColor color){
+        Collection<ChessMove> allValidMoves = new HashSet<>();
+        for(Map.Entry<ChessPosition,ChessPiece> entry:currentGame.getPieces().entrySet()){
+            if(entry.getValue().getTeamColor()==color){
+                allValidMoves.addAll(validMoves(entry.getKey()));
+            }
+        }
+        return allValidMoves;
     }
 
     private boolean tryMove(ChessMove move){
@@ -182,7 +193,7 @@ public class ChessGame {
      */
     public boolean isInCheckmate(TeamColor teamColor) {
         // no valid moves and in check
-        throw new RuntimeException("Not implemented");
+        return AllValidMoves(teamColor).isEmpty() && isInCheck(teamColor);
     }
 
     /**
@@ -194,7 +205,7 @@ public class ChessGame {
      */
     public boolean isInStalemate(TeamColor teamColor) {
         // no valid moves and not in check
-        throw new RuntimeException("Not implemented");
+        return AllValidMoves(teamColor).isEmpty() && !isInCheck(teamColor);
     }
 
     /**

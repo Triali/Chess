@@ -33,6 +33,9 @@ public class ChessGame {
     public TeamColor getTeamTurn() {
         return currentTurn;
     }
+    private void ChangeTeamTurn(){
+        currentTurn = (currentTurn == TeamColor.WHITE)?(TeamColor.BLACK):(TeamColor.WHITE);
+    }
 
     @Override
     public boolean equals(Object o)
@@ -40,13 +43,13 @@ public class ChessGame {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChessGame chessGame = (ChessGame) o;
-        return Objects.equals(currentGame, chessGame.currentGame) && currentTurn == chessGame.currentTurn && Objects.equals(lastMove, chessGame.lastMove);
+        return Objects.equals(currentGame, chessGame.currentGame) && (currentTurn == chessGame.currentTurn);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(currentGame, currentTurn, lastMove);
+        return Objects.hash(currentGame, currentTurn, blackKing, whiteKing, lastMove);
     }
 
     @Override
@@ -84,6 +87,7 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
+//        System.out.println("running validMoves");
         ChessPiece piece = currentGame.getPiece(startPosition);
         Collection<ChessMove> validMoves = piece.pieceMoves(currentGame,startPosition);
         for (ChessMove move:validMoves)
@@ -98,6 +102,7 @@ public class ChessGame {
 
 
     private Collection<ChessMove> AllValidMoves(TeamColor color){
+//        System.out.println("running AllValidMoves");
         Collection<ChessMove> allValidMoves = new HashSet<>();
         for(Map.Entry<ChessPosition,ChessPiece> entry:currentGame.getPieces().entrySet()){
             if(entry.getValue().getTeamColor()==color){
@@ -108,6 +113,7 @@ public class ChessGame {
     }
 
     private boolean tryMove(ChessMove move){
+//        System.out.println("running tryMove");
         ChessPiece pieceStart = currentGame.getPiece(move.getStartPosition());
         ChessPiece pieceEnd = currentGame.getPiece(move.getEndPosition());
         ChessGame.TeamColor color = pieceStart.getTeamColor();
@@ -134,13 +140,16 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
+//        System.out.println("running makeMove");
         ChessPiece piece = currentGame.getPiece(move.getStartPosition());
         // check if it is a valid move
         Collection<ChessMove> moves = validMoves(move.getStartPosition());
-        if(moves.contains(move))
+        if(moves.contains(move) || (piece != null))
         {
             currentGame.removePiece(move.getStartPosition());
             currentGame.addPiece(move.getEndPosition(), piece);
+            ChangeTeamTurn();
+
             if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == TeamColor.BLACK)
             {
                 blackKing = move.getEndPosition();
@@ -181,6 +190,7 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
+//        System.out.println("running isInCheck");
         ChessPosition pos = (teamColor == TeamColor.WHITE)?(getWhiteKing()):(getBlackKing());
         return (CheckDiagonal(pos) || CheckJumps(pos) || CheckPawns(pos) || CheckStraight(pos));
     }
@@ -192,6 +202,7 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
+//        System.out.println("running isInCheckmate");
         // no valid moves and in check
         return AllValidMoves(teamColor).isEmpty() && isInCheck(teamColor);
     }
@@ -204,6 +215,7 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
+//        System.out.println("running isInStalemate");
         // no valid moves and not in check
         return AllValidMoves(teamColor).isEmpty() && !isInCheck(teamColor);
     }
@@ -238,36 +250,43 @@ public class ChessGame {
      */
     private ChessPiece.PieceType CheckForAttack(ChessPosition startPos, int[] vector, int spaces)
     {
+//        System.out.println("running CheckForAttack");
         ChessPosition pos = startPos;
-        TeamColor color = currentGame.getPiece(pos).getTeamColor();
-        pos = pos.addPosition(vector);
-        int count = 0;
-        while (pos.getColumn() <= 8 && pos.getColumn() >= 1 && pos.getRow() <= 8 && pos.getRow() >= 1 && count < spaces)
+        try
         {
-            ChessPiece currPiece = currentGame.getPiece(pos);
-            if (currPiece != null)
+            TeamColor color = currentGame.getPiece(startPos).getTeamColor();
+            pos = pos.addPosition(vector);
+            int count = 0;
+            while (pos.getColumn() <= 8 && pos.getColumn() >= 1 && pos.getRow() <= 8 && pos.getRow() >= 1 && count < spaces)
             {
-                // same color
-                if (currPiece.getTeamColor() == color)
+                ChessPiece currPiece = currentGame.getPiece(pos);
+                if (currPiece != null)
                 {
-                    return null;
-                }
-                // opposite color
-                else
+                    // same color
+                    if (currPiece.getTeamColor() == color)
+                    {
+                        return null;
+                    }
+                    // opposite color
+                    else
+                    {
+                        return currPiece.getPieceType();
+                    }
+                } else
                 {
-                    return currPiece.getPieceType();
+                    pos = pos.addPosition(vector);
                 }
-            } else
-            {
-                pos = pos.addPosition(vector);
-            }
-            count++;
+                count++;
 
+            }
+        }catch (Exception e){
+            return null;
         }
         return null;
 
     }
     public Boolean CheckDiagonal(ChessPosition startPos){
+//        System.out.println("running CheckDiagonal");
         int[] dir = new int[]{1,-1};
         for (int i = 0; i < 4; i++)
         {
@@ -279,6 +298,7 @@ public class ChessGame {
         return false;
     }
     public Boolean CheckStraight(ChessPosition startPos){
+//        System.out.println("running CheckStraight");
         int[] dir = new int[]{1,0};
         for (int i = 0; i < 4; i++)
         {
@@ -290,6 +310,7 @@ public class ChessGame {
         return false;
     }
     public Boolean CheckJumps(ChessPosition startPos){
+//        System.out.println("running CheckJumps");
         int[] dir = new int[]{1,2};
         for (int i = 0; i < 4; i++)
         {
@@ -309,12 +330,20 @@ public class ChessGame {
         return false;
     }
     public Boolean CheckPawns(ChessPosition startPos){
-        TeamColor color = currentGame.getPiece(startPos).getTeamColor();
-        int row = (color == TeamColor.WHITE)?(1):(-1);
-        int col = 1;
-        if((currentGame.getPiece(startPos.addPosition(new int[]{row,col})).getPieceType()== ChessPiece.PieceType.PAWN)
-        ||(currentGame.getPiece(startPos.addPosition(new int[]{row,-col})).getPieceType()== ChessPiece.PieceType.PAWN)){
-            return true;
+//        System.out.println("running CheckPawns");
+        try
+        {
+            TeamColor color = currentGame.getPiece(startPos).getTeamColor();
+            int row = (color == TeamColor.WHITE) ? (1) : (-1);
+            int col = 1;
+            if ((currentGame.getPiece(startPos.addPosition(new int[]{row, col})).getPieceType() == ChessPiece.PieceType.PAWN)
+                    || (currentGame.getPiece(startPos.addPosition(new int[]{row, -col})).getPieceType() == ChessPiece.PieceType.PAWN))
+            {
+                return true;
+            }
+        }catch (Exception e)
+        {
+            return false;
         }
         return false;
     }

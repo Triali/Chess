@@ -25,25 +25,38 @@ public class Testing {
         ChessPiece king = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
 
 
-        board.addPiece(new ChessPosition(5,4),King);
-        board.addPiece(new ChessPosition(8,4), rook);
-        board.addPiece(new ChessPosition(8,7), queen);
-        board.addPiece(new ChessPosition(6,3), pawn);
-        board.addPiece(new ChessPosition(7,3), knight);
-        board.addPiece(new ChessPosition(5,1), queen);
+        board.addPiece(new ChessPosition(1,2),King);
+        board.addPiece(new ChessPosition(2,3), Bishop);
+        board.addPiece(new ChessPosition(1,8), Rook);
+        board.addPiece(new ChessPosition(7,8), queen);
+        board.addPiece(new ChessPosition(6,3), knight);
+        board.addPiece(new ChessPosition(6,7), pawn);
 
         ChessGame game = new ChessGame();
         game.setBoard(board);
-        game.setWhiteKing(new ChessPosition(5,4));
+        game.setWhiteKing(new ChessPosition(1,2));
 
 
 
 
 
         board.printBoard();
+        System.out.println(game.getTeamTurn());
         int[] dir = new int[]{0,-1};
-        System.out.println(game.isInCheck(ChessGame.TeamColor.WHITE));
+        System.out.println(game.validMoves(new ChessPosition(1,2)));
+        try
+        {
 
+            game.makeMove(new ChessMove(new ChessPosition(1, 2), new ChessPosition(1, 1)));
+
+            System.out.println("moving King");
+            board.printBoard();
+
+            System.out.println(game.getTeamTurn());
+        }catch (Exception e)
+        {
+
+        }
 
 
 

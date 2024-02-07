@@ -5,7 +5,8 @@ import java.util.Collection;
 
 public class Testing {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidMoveException
+    {
         // create board
         ChessBoard board = new ChessBoard();
 
@@ -44,6 +45,8 @@ public class Testing {
 //        System.out.println(game.isInCheck(ChessGame.TeamColor.WHITE));
 //        int[] dir = new int[]{0,-1};
         System.out.println(game.validMoves(new ChessPosition(2,6)));
+        game.makeMove(new ChessMove(new ChessPosition(2, 6), new ChessPosition(2, 2)));
+        board.printBoard();
 //        try
 //        {
 //

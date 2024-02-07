@@ -162,7 +162,8 @@ public class ChessGame {
         ChessPiece piece = currentGame.getPiece(move.getStartPosition());
         // check if it is a valid move
         Collection<ChessMove> moves = validMoves(move.getStartPosition());
-        if(moves.contains(move) || (piece != null))
+
+        if(moves.contains(move) && (piece != null))
         {
             currentGame.removePiece(move.getStartPosition());
             currentGame.addPiece(move.getEndPosition(), piece);

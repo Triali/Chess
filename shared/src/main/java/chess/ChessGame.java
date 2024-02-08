@@ -431,28 +431,37 @@ public class ChessGame {
     }
     public Boolean CheckPawns(ChessPosition startPos){
 //        System.out.println("running CheckPawns");
-        try
-        {
-            TeamColor color = currentGame.getPiece(startPos).getTeamColor();
-            int row = (color == TeamColor.WHITE) ? (1) : (-1);
-            int col = 1;
-            System.out.println("pawn Start " + startPos);
+try
+{
+    TeamColor color = currentGame.getPiece(startPos).getTeamColor();
+    int row = (color == TeamColor.WHITE) ? (1) : (-1);
+    int col = 1;
+    int[] array = new int[]{row, col};
+    int[] array2 = new int[]{row, -col};
+    System.out.println("pawn Start " + startPos);
+    System.out.println("add pos " + array[0] + ", " + array[1]);
+    System.out.println("add pos " + array2[0] + ", " + array2[1]);
+    ChessPosition left = startPos.addPosition(new int[]{row, col});
+    ChessPosition right = startPos.addPosition(new int[]{row, -col});
 
-            ChessPiece rightPiece = currentGame.getPiece(startPos.addPosition(new int[]{row, col}));
-            ChessPiece leftPiece = currentGame.getPiece(startPos.addPosition(new int[]{row, -col}));
-            System.out.println("pawn Right " + startPos.addPosition(new int[]{row, col})+" "+rightPiece);
-            System.out.println("pawn Left " + startPos.addPosition(new int[]{row, -col})+" "+leftPiece);
+    ChessPiece rightPiece = currentGame.getPiece(right);
+    ChessPiece leftPiece = currentGame.getPiece(left);
+    System.out.println("pawn Right " + right + " " + rightPiece);
+    System.out.println("pawn Left " + left + " " + leftPiece);
 
-            if (((leftPiece.getPieceType() == ChessPiece.PieceType.PAWN) && (leftPiece.getTeamColor() != color))
-                    || ((rightPiece.getPieceType() == ChessPiece.PieceType.PAWN) && (rightPiece.getTeamColor() != color)))
-            {
-                return true;
-            }
-        }catch (Exception e)
-        {
-            return false;
-        }
-        return false;
+    if ((leftPiece != null) && (leftPiece.getPieceType() == ChessPiece.PieceType.PAWN) && (color != leftPiece.getTeamColor()))
+    {
+        return true;
+    } else if ((rightPiece != null) && (rightPiece.getPieceType() == ChessPiece.PieceType.PAWN) && (color != rightPiece.getTeamColor()))
+    {
+        return true;
+    }
+}
+catch(Exception e)
+{
+    return false;
+}
+return false;
     }
     private static int[] rotate90(int[] x)
     {

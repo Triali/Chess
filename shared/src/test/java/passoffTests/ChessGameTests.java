@@ -462,7 +462,7 @@ public class ChessGameTests {
                 | | | | | | | | |
                 """));
         game.setTeamTurn(ChessGame.TeamColor.WHITE);
-
+        game.getBoard().printBoard();
         Assertions.assertTrue(game.isInCheckmate(ChessGame.TeamColor.WHITE),
                 "White is in checkmate but isInCheckmate returned false");
         Assertions.assertFalse(game.isInCheckmate(ChessGame.TeamColor.BLACK),

@@ -1,0 +1,9 @@
+package server;
+
+interface AuthTokenDAO
+{
+
+
+
+
+}

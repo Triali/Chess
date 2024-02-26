@@ -2,11 +2,11 @@ package server;
 
 interface AuthTokenDAO
 {
-    public AuthToken get();
+    public AuthToken get(String authToken);
 
-    public void insert();
+    public void insert(String userName);
 
-    public void delete();
+    public void delete(String authToken);
 
     public void post();
 

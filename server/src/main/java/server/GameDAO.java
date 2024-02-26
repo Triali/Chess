@@ -5,11 +5,11 @@ import chess.ChessGame;
 interface GameDAO
 {
 
-    public ChessGame get();
+    public Game get(String ID);
 
-    public void insert();
+    public void insert(Game newGame);
 
-    public void delete();
+    public void delete(String ID);
 
     public void post();
 }

@@ -1,13 +1,17 @@
 package server;
 
-interface UserDAO
+import java.util.ArrayList;
+
+public interface UserDAO
 {
 
-    public User get();
+    public User get(String userName);
 
-    public void insert();
+    public ArrayList<User> getAll();
 
-    public void delete();
+    public void insert(String userName, String password,String email);
+
+    public void delete(String userName);
 
     public void post();
 

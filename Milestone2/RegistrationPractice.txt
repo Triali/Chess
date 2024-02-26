@@ -9,7 +9,7 @@ Client->Server:[POST] /user\n { "username":"", "password":"", "email":"" }
 Server->Services:register(username, password, email)
 Services->DataAccess:GetUser(username)
 DataAccess->db: SELECT username FROM user
-DataAccess-->Services: null
+DataAccess-->Services:null
 Services->DataAccess:CreateUser(username, password, email)
 DataAccess->db:INSERT username, password, email INTO user
 Services->DataAccess:CreateAuthToken(username)
@@ -24,27 +24,31 @@ Client->Server:[DELETE] /db
 Server->Services:ClearAll()
 Services->DataAccess: ClearAll()
 DataAccess->db:DELETE ALL Games, Users, AuthTokens
+DataAccess-->Services: success
+Services-->Server:success
 Server-->Client:[200]
 end
 
 group #navy Logout #white
 Client->Server:[DELETE] /session
-Server->Services: Logout()
-Services->DataAccess:VerifyAuthToken(authToken)
-DataAccess->db:SELECT authToken IN AuthToken
+Server->Services:Logout(authToken)
+Services->DataAccess:getUserName(authToken)
+DataAccess->db:SELECT userName IN AuthToken
+DataAccess-->Services:userName
 Services->DataAccess:RemoveAuthToken(authToken)
-DataAccess->db:DELETE AuthToken byauthToken 
-
-Server-->Client:authToken
+DataAccess->db:DELETE AuthToken by authToken 
+DataAccess-->Services: success
+Services-->Server:success
+Server-->Client:[200]
 end
 
 
 group #navy Login #white
 Client->Server:[POST] /session \n { "username":"", "password":"" }
 Server->Services:Login(username, password)
-Services->DataAccess:VerifyPassword(username, password)
-DataAccess->db: SELECT username FROM user
+Services->DataAccess:getPassword(username)
 DataAccess->db: SELECT password FROM user
+DataAccess -->Services: password
 Services->DataAccess: CreateAuthToken(username)
 DataAccess->db:INSERT authToken, username INTO AuthToken
 DataAccess-->Services:authToken
@@ -56,9 +60,9 @@ end
 group #navy List Games #white
 Client->Server:[GET] /game\n authorization: <authToken>
 Server->Services:ListGames()
-Services->DataAccess: VerifyAuthToken(authToken)
-DataAccess->db:SELECT authToken IN AuthToken
-Services->DataAccess:PrintAllGames()
+Services->DataAccess:getUserName(authtoken)
+DataAccess->db:SELECT userName IN AuthToken
+Services->DataAccess:getAllGames()
 DataAccess->db:SELECT ALL games IN Game
 DataAccess-->Services:{ "games": [{"gameID": 1234, "whiteUsername":"", "blackUsername":"", "gameName:""} ]}
 Services-->Server:{ "games": [{"gameID": 1234, "whiteUsername":"", "blackUsername":"", "gameName:""} ]}
@@ -67,24 +71,33 @@ end
 
 group #navy Create Game #white
 Client->Server:[POST] /game\n authorization: <authToken>\n { "gameName":"" }
-Server->Services:CreateGame(gameName, color)
-Services->DataAccess: VerifyAuthToken(authToken)
-DataAccess->db:SELECT authToken IN AuthToken
-Services->DataAccess: CreateGame(gameName, color)
+Server->Services:CreateGame(gameName, color,authToken)
+Services->DataAccess:getUserName(authToken)
+DataAccess->db:SELECT userName IN AuthToken
+Services->DataAccess:CreateGame(gameName, color, userName)
 DataAccess->db:INSERT gameName, gameID, whiteUsername, blackUsername FROM Game
-DataAccess-->Services:gameID
+DataAccess-->Services:success
 Services-->Server:gameID
 Server-->Client:[200] { "gameID": 1234 }
 end
 
 group #navy Join Game #white
 Client->Server:[PUT] /game\n authorization: <authToken>\n{ "playerColor":"WHITE/BLACK", "gameID": 1234 }
-Server->Services:JoinGame(gameID,color)
-Services->DataAccess: VerifyAuthToken(authToken)
-DataAccess->db:SELECT authToken IN AuthToken
-Services->DataAccess: AddToGame(gameID,color)
-DataAccess->db:ADD color TO GameID FROM Game
+Server->Services:JoinGame(gameID,color,authToken)
+Services->DataAccess:getUserName(authToken)
+DataAccess->db:SELECT userName IN AuthToken
+DataAccess-->Services: userName
+Services->DataAccess:updateUserName(gameID,color)
 
+DataAccess->db:POST userName TO WhiteUsermame or BlackUserName\n FROM Game by GameID
+DataAccess-->Services: success
+Services-->Server:success
 
 Server-->Client:[200]
 end
+
+
+
+
+
+#make sure it returns something for every function

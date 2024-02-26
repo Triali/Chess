@@ -17,6 +17,7 @@ public class ChessGame
     private ChessPosition whiteKing;
     private ChessMove lastMove;
 
+
     public ChessGame()
     {
         currentGame = new ChessBoard();
@@ -27,6 +28,7 @@ public class ChessGame
     {
         currentGame = board;
         this.currentTurn = currentTurn;
+
         FindKings();
     }
 

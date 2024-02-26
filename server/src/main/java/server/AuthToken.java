@@ -11,6 +11,11 @@ public class AuthToken
     private String usermane;
     private String authToken;
 
+    public String getAuthToken()
+    {
+        return authToken;
+    }
+
     public AuthToken(String usermane)
     {
         this.usermane = usermane;

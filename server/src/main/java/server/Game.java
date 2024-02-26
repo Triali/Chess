@@ -8,7 +8,7 @@ public class Game
 {
     private ChessGame game;
     private String name;
-    private String ID;
+    private int ID = -1;
     private String blackUsername;
     private String whiteUsername;
 
@@ -30,12 +30,12 @@ public class Game
         this.name = name;
     }
 
-    public String getID()
+    public int getID()
     {
         return ID;
     }
 
-    public void setID(String ID)
+    public void setID(int ID)
     {
         this.ID = ID;
     }
@@ -47,7 +47,13 @@ public class Game
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game1 = (Game) o;
-        return Objects.equals(game, game1.game);
+        return Objects.equals(ID, game1.ID);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Game{"+name +", "+ ID+'}';
     }
 
     @Override

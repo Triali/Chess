@@ -1,29 +1,51 @@
 package server;
 
 import chess.ChessGame;
+import dataAccess.DataAccessException;
 import server.Game;
 import java.util.*;
 
 public class GameList implements GameDAO
 {
-    HashMap<String, Game> allGames;
+    HashMap<Integer, Game> allGames = new HashMap();
 
-    public Game get(String ID){
-        return allGames.get(ID);
-    }
-    public void insert(Game newGame)
+    public Game get(int ID) throws DataAccessException
     {
+        if(allGames.containsKey(ID)){
+            return allGames.get(ID);
+        }
+        else{
+            throw new DataAccessException("Element not found");
+        }
 
-        String iD =  String.valueOf(allGames.size());
-        newGame.setID(iD);
+    }
+    public void insert(Game newGame) throws DataAccessException
+    {
+        if(newGame.getID() == -1)
+        {
+            newGame.setID(allGames.size());
 
+        }
+        int id = newGame.getID();
 
-
-        allGames.put(iD,newGame);
+        if(allGames.containsKey(id)){
+            throw new DataAccessException("Element already exists");
+        }else{
+            allGames.put(id,newGame);
+        }
     }
 
-    public void delete(String ID)
+    public void delete(int ID) throws DataAccessException
     {
+        if(allGames.containsKey(ID)){
+            allGames.remove(ID);
+        }
+        else{
+            throw new DataAccessException("Element not found");
+        }
+
+
+
         allGames.remove(ID);
 
     }
@@ -31,5 +53,13 @@ public class GameList implements GameDAO
     public void post()
     {
 
+    }
+
+    public ArrayList<Game> getAll(){
+        ArrayList<Game> games = new ArrayList();
+        allGames.forEach((key, value)->{
+            games.add(value);
+        });
+        return games;
     }
 }

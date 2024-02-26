@@ -41,7 +41,7 @@ public class UserList implements UserDAO
     public void delete(String userName) throws DataAccessException
     {
         if(allUsers.containsKey(userName)){
-            allUsers.remove("Harry");
+            allUsers.remove("Username");
         }
         else{
             throw new DataAccessException("Element not found");

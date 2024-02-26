@@ -37,7 +37,7 @@ public class AuthToken
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthToken authToken1 = (AuthToken) o;
-        return Objects.equals(usermane, authToken1.usermane) && Objects.equals(authToken, authToken1.authToken);
+        return Objects.equals(usermane, authToken1.usermane);
     }
 
     @Override

@@ -16,9 +16,9 @@ public class TestGameDAO
         GameDAO Games = new GameList();
         try
         {
-            Games.insert(new Game("game1","Tod","Bob") );
-            Games.insert(new Game("game2","Phil","Sue") );
-            Games.insert(new Game("game3","Jan","Ted") );
+            Games.insert("game1" );
+            Games.insert("game2" );
+            Games.insert("game3" );
         } catch (DataAccessException ex)
         {
 
@@ -29,9 +29,10 @@ public class TestGameDAO
     ArrayList<Game> fillTestGames()
     {
         ArrayList<Game> TestGames = new ArrayList();
-        TestGames.add(new Game("game1","Tod","Bob") );
-        TestGames.add(new Game("game2","Phil","Sue") );
-        TestGames.add(new Game("game3","Jan","Ted") );
+
+        TestGames.add(new Game("game1") );
+        TestGames.add(new Game("game2") );
+        TestGames.add(new Game("game3") );
         for (int i = 0; i < TestGames.size(); i++)
         {
             TestGames.get(i).setID(i);
@@ -74,7 +75,7 @@ public class TestGameDAO
     {
         GameDAO Games = fillGames();
         Game testGet;
-        Game test = new Game("game2","Phil","Sue");
+        Game test = new Game("game3");
         test.setID(3);
         try
         {

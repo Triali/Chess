@@ -60,7 +60,7 @@ public void UpdateUsername(int gameID, String color, String username)throws Data
     games.post(gameID,color,username);
 }
 
-    public String register(User loginRequest) throws Exception
+    public String Register(User loginRequest) throws Exception
     {
         try{
             getUser(loginRequest.getUserName());

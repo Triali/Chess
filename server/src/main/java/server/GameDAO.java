@@ -10,7 +10,7 @@ public interface GameDAO
 
     public Game get(int ID) throws DataAccessException;
 
-    public void insert(Game newGame) throws DataAccessException;
+    public void insert(String name) throws DataAccessException;
 
     public void delete(int ID) throws DataAccessException;
 

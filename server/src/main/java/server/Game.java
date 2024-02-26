@@ -9,8 +9,8 @@ public class Game
     private ChessGame game;
     private String name;
     private int ID = -1;
-    private String blackUsername;
-    private String whiteUsername;
+    private String blackUsername = "";
+    private String whiteUsername ="";
 
     public String getBlackUsername()
     {
@@ -32,11 +32,9 @@ public class Game
         this.whiteUsername = whiteUsername;
     }
 
-    public Game(String name, String blackUsername, String whiteUsername)
+    public Game(String name)
     {
         this.name = name;
-        this.blackUsername = blackUsername;
-        this.whiteUsername = whiteUsername;
         game = new ChessGame();
     }
 

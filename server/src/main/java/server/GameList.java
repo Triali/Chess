@@ -19,8 +19,9 @@ public class GameList implements GameDAO
         }
 
     }
-    public void insert(Game newGame) throws DataAccessException
+    public void insert(String name) throws DataAccessException
     {
+        Game newGame = new Game(name);
         if(newGame.getID() == -1)
         {
             newGame.setID(allGames.size());
@@ -64,7 +65,7 @@ public class GameList implements GameDAO
                 return;
             }
         }
-        throw new DataAccessException("Can not add username to exsiting game");
+        throw new DataAccessException("Can not add username to existing game");
 
     }
 

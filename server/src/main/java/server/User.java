@@ -13,6 +13,11 @@ public class User
         return passWord;
     }
 
+    public String getEmail()
+    {
+        return email;
+    }
+
     public User(String userName, String passWord, String email)
     {
         this.userName = userName;

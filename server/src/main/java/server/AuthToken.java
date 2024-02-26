@@ -3,12 +3,9 @@ package server;
 import java.util.Objects;
 import java.util.UUID;
 
-
-import static java.util.UUID.randomUUID;
-
 public class AuthToken
 {
-    private String usermane;
+    private String username;
     private String authToken;
 
     public String getAuthToken()
@@ -16,9 +13,9 @@ public class AuthToken
         return authToken;
     }
 
-    public AuthToken(String usermane)
+    public AuthToken(String username)
     {
-        this.usermane = usermane;
+        this.username = username;
         authToken = UUID.randomUUID().toString();
     }
 
@@ -26,9 +23,14 @@ public class AuthToken
     public String toString()
     {
         return "AuthToken{" +
-                "usermane='" + usermane + '\'' +
+                "usermane='" + username + '\'' +
                 ", authToken='" + authToken + '\'' +
                 '}';
+    }
+
+    public String getUsername()
+    {
+        return username;
     }
 
     @Override
@@ -37,12 +39,12 @@ public class AuthToken
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AuthToken authToken1 = (AuthToken) o;
-        return Objects.equals(usermane, authToken1.usermane);
+        return Objects.equals(username, authToken1.username);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(usermane, authToken);
+        return Objects.hash(username, authToken);
     }
 }

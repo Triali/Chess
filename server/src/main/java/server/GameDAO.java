@@ -14,7 +14,7 @@ public interface GameDAO
 
     public void delete(int ID) throws DataAccessException;
 
-    public void post();
+    public void post(int ID, String color,String username) throws DataAccessException;
 
     public ArrayList<Game> getAll();
 

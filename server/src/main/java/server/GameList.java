@@ -50,8 +50,21 @@ public class GameList implements GameDAO
 
     }
 
-    public void post()
+    public void post(int ID, String color,String username)throws DataAccessException
     {
+        Game game = allGames.get(ID);
+        if(color == "BLACK"){
+            if(allGames.get(ID).getBlackUsername() == ""){
+                allGames.get(ID).setBlackUsername(username);
+                return;
+            }
+        }else if (color == "WHITE"){
+            if(allGames.get(ID).getWhiteUsername() == ""){
+                allGames.get(ID).setWhiteUsername(username);
+                return;
+            }
+        }
+        throw new DataAccessException("Can not add username to exsiting game");
 
     }
 

@@ -12,6 +12,26 @@ public class Game
     private String blackUsername;
     private String whiteUsername;
 
+    public String getBlackUsername()
+    {
+        return blackUsername;
+    }
+
+    public void setBlackUsername(String blackUsername)
+    {
+        this.blackUsername = blackUsername;
+    }
+
+    public String getWhiteUsername()
+    {
+        return whiteUsername;
+    }
+
+    public void setWhiteUsername(String whiteUsername)
+    {
+        this.whiteUsername = whiteUsername;
+    }
+
     public Game(String name, String blackUsername, String whiteUsername)
     {
         this.name = name;

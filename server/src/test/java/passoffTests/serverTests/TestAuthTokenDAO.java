@@ -2,10 +2,7 @@ package passoffTests.serverTests;
 
 import dataAccess.DataAccessException;
 import org.junit.jupiter.api.*;
-import server.AuthToken;
-
-import server.AuthTokenDAO;
-import server.AuthTokenList;
+import server.*;
 
 import java.util.ArrayList;
 
@@ -137,6 +134,17 @@ public class TestAuthTokenDAO
         });
         Assertions.assertEquals("Element not found",ex.getMessage());
 
+    }
+
+
+    @Test
+    @DisplayName("Delete All AuthTokens")
+    public void DeleteAllAuthTokens()
+    {
+        AuthTokenDAO Tokens = fillTokens();
+        Tokens.deleteAll();
+        ArrayList<AuthToken> testTokens = new ArrayList();
+        Assertions.assertEquals(testTokens,Tokens.getAll());
     }
 
 //    @Test

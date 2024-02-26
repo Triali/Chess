@@ -129,6 +129,17 @@ public class TestGameDAO
 
     }
 
+
+    @Test
+    @DisplayName("Delete All Games")
+    public void DeleteAllGames()
+    {
+        GameDAO Games = fillGames();
+        Games.deleteAll();
+        ArrayList<Game> TestGames = new ArrayList();
+        Assertions.assertEquals(TestGames,Games.getAll());
+    }
+
 //    @Test
 //    @DisplayName("print All")
 //    public void PrintAll()

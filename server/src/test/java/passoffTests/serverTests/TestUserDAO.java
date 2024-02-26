@@ -2,9 +2,7 @@ package passoffTests.serverTests;
 
 import dataAccess.DataAccessException;
 import org.junit.jupiter.api.*;
-import server.User;
-import server.UserDAO;
-import server.UserList;
+import server.*;
 
 import java.util.ArrayList;
 
@@ -140,5 +138,12 @@ public class TestUserDAO
 
     }
 
-
+    @DisplayName("Delete All Users")
+    public void DeleteAllUsers()
+    {
+        UserDAO Users = fillUsers();
+        Users.deleteAll();
+        ArrayList<User> testUsers = new ArrayList();
+        Assertions.assertEquals(testUsers,Users.getAll());
+    }
 }

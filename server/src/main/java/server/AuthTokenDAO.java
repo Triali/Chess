@@ -20,6 +20,6 @@ public interface AuthTokenDAO
 
     public String allToString();
 
-
+    public void deleteAll();
 
 }

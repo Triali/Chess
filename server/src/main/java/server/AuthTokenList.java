@@ -65,6 +65,11 @@ AuthToken temptoken = new AuthToken(userName);
         return alltokens;
     }
 
+    public void deleteAll()
+    {
+        allTokens.clear();
+    }
+
     public void post()
     {
 

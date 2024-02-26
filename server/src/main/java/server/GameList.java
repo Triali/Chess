@@ -62,4 +62,7 @@ public class GameList implements GameDAO
         });
         return games;
     }
+    public void deleteAll(){
+        allGames.clear();
+    }
 }

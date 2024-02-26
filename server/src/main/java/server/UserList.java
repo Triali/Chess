@@ -60,5 +60,10 @@ public class UserList implements UserDAO
         return alltoString;
     }
 
+    public void deleteAll()
+    {
+        allUsers.clear();
+    }
+
 
 }

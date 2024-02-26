@@ -19,6 +19,8 @@ public interface UserDAO
 
     public String printAll();
 
+    public void deleteAll();
+
 
 
 }

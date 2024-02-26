@@ -17,4 +17,6 @@ public interface GameDAO
     public void post();
 
     public ArrayList<Game> getAll();
+
+    public void deleteAll();
 }

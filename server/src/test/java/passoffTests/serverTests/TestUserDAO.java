@@ -14,10 +14,14 @@ public class TestUserDAO
 {
     UserDAO fillUsers(){
         UserDAO Users = new UserList();
+try
+{
+    Users.insert("Spencer", "S_username", "spencer@email.com");
+    Users.insert("Jim", "J_username", "jim@email.com");
+    Users.insert("Harry", "H_username", "harry@email.com");
+}catch(DataAccessException ex){
 
-        Users.insert("Spencer", "S_username","spencer@email.com");
-        Users.insert("Jim", "J_username","jim@email.com");
-        Users.insert("Harry", "H_username","harry@email.com");
+}
         return Users;
     }
     ArrayList<User> fillTestUsers(){
@@ -51,7 +55,7 @@ ArrayList allUsers = Users.getAll();
         Exception ex = assertThrows(DataAccessException.class,()->{
             Users.insert("Jim", "J_username","jim@email.com");
         });
-        Assertions.assertEquals("Already Present",ex.getMessage());
+        Assertions.assertEquals("Element already exists",ex.getMessage());
         }
 
 
@@ -59,6 +63,13 @@ ArrayList allUsers = Users.getAll();
     @DisplayName("Get User")
     public void GetUser(){
         UserDAO Users = fillUsers();
+        User test;
+        try
+        {
+            test = Users.get("Jim");
+            Assertions.assertEquals(test,new User("Jim", "J_username", "jim@email.com"));
+        }catch(DataAccessException ex){}
+
     }
 
 
@@ -66,19 +77,52 @@ ArrayList allUsers = Users.getAll();
     @DisplayName("Get Nonexsitant User")
     public void GetNonUser(){
         UserDAO Users = fillUsers();
+        Exception ex = assertThrows(DataAccessException.class,()->{
+            Users.get("Phil");
+        });
+        Assertions.assertEquals("Element not found",ex.getMessage());
     }
 
     @Test
     @DisplayName("Delete User")
     public void DeleteUsers(){
         UserDAO Users = fillUsers();
+        ArrayList<User> testUsers = fillTestUsers();
+        try
+        {
+         testUsers.remove(0);
+         Users.delete("Harry");
+         Assertions.assertEquals(Users.getAll(),testUsers);
+        }catch(DataAccessException ex){}
+
     }
 
     @Test
     @DisplayName("Delete Non User")
     public void DeleteNonUsers(){
         UserDAO Users = fillUsers();
+        Exception ex = assertThrows(DataAccessException.class,()->{
+            Users.delete("Phil");
+        });
+        Assertions.assertEquals("Element not found",ex.getMessage());
+
     }
+
+    @Test
+    @DisplayName("print All")
+    public void PrintAll(){
+        UserDAO Users = fillUsers();
+        ArrayList<User> TestUsers = fillTestUsers();
+        String testString = new String();
+        for (User user:TestUsers)
+        {
+            testString.concat(user.getUserName()+" : "+user);
+
+        }
+        Assertions.assertEquals(testString,Users.printAll());
+
+    }
+
 
 
 

@@ -1,5 +1,7 @@
 package server;
 
+import dataAccess.DataAccessException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -7,9 +9,14 @@ public class UserList implements UserDAO
 {
 //    private
     HashMap<String, User> allUsers = new HashMap();
-    public User get(String userName)
+    public User get(String userName) throws DataAccessException
     {
-        return allUsers.get(userName);
+        if(allUsers.containsKey(userName)){
+            return allUsers.get(userName);
+        }
+        else{
+            throw new DataAccessException("Element not found");
+        }
     }
 
     public ArrayList<User> getAll(){
@@ -20,18 +27,38 @@ public class UserList implements UserDAO
         return users;
     }
 
-    public void insert(String userName,String password, String email)
+    public void insert(String userName,String password, String email) throws DataAccessException
     {
-allUsers.put(userName,new User(userName,password,email));
+        if(allUsers.containsKey(userName)){
+            throw new DataAccessException("Element already exists");
+        }else{
+            allUsers.put(userName,new User(userName,password,email));
+        }
+
+
     }
 
-    public void delete(String userName)
+    public void delete(String userName) throws DataAccessException
     {
-        allUsers.remove(userName);
-    }
+        if(allUsers.containsKey(userName)){
+            allUsers.remove("Harry");
+        }
+        else{
+            throw new DataAccessException("Element not found");
+        }
 
+    }
     public void post()
     {
 
     }
+    public String printAll(){
+        String alltoString = new String();
+        allUsers.forEach((key, value)->{
+            alltoString.concat(key + " : " + value+"\n");
+        });
+        return alltoString;
+    }
+
+
 }

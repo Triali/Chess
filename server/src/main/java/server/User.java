@@ -25,6 +25,11 @@ public class User
                 '}';
     }
 
+    public String getUserName()
+    {
+        return userName;
+    }
+
     @Override
     public boolean equals(Object o)
     {

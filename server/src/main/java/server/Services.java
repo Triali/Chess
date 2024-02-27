@@ -16,14 +16,19 @@ public User getUser(String username) throws DataAccessException{
         return users.get(username);
 }
 
-public void CreateUser(String username, String password, String email) throws DataAccessException{
+    public UserDAO getUsers()
+    {
+        return users;
+    }
+
+    public void CreateUser(String username, String password, String email) throws DataAccessException{
     users.insert(username,password,email);
 }
 public String CreateAuthToken(String username) throws DataAccessException
 {
-    AuthToken token = new AuthToken(username);
-    tokens.insert(token);
-    return token.getAuthToken();
+
+    return tokens.insert(username);
+
 
 }
 
@@ -60,6 +65,11 @@ public void UpdateUsername(int gameID, String color, String username)throws Data
     games.post(gameID,color,username);
 }
 
+    public AuthTokenDAO getTokens()
+    {
+        return tokens;
+    }
+
     public String Register(User loginRequest) throws Exception
     {
         try{
@@ -72,8 +82,12 @@ public void UpdateUsername(int gameID, String color, String username)throws Data
     }
 
     public void Logout(String authToken)throws DataAccessException{
-        getUserName(authToken);
         RemoveAuthToken(authToken);
+    }
+
+    public GameDAO getGames()
+    {
+        return games;
     }
 
     public String Login(LoginRequest login)throws Exception{

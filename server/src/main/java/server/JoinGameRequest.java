@@ -7,6 +7,12 @@ public class JoinGameRequest
     private String color;
     private int gameID;
 
+    public JoinGameRequest(String color, int gameID)
+    {
+        this.color = color;
+        this.gameID = gameID;
+    }
+
     public String getColor()
     {
         return color;

@@ -53,6 +53,10 @@ public class GameList implements GameDAO
 
     public void post(int ID, String color,String username)throws DataAccessException
     {
+        if(ID < 0 || ID >= allGames.size())
+        {
+            throw new DataAccessException("Can not add username to existing game");
+        }
         Game game = allGames.get(ID);
         if(color == "BLACK"){
             if(allGames.get(ID).getBlackUsername() == ""){
@@ -71,9 +75,15 @@ public class GameList implements GameDAO
 
     public ArrayList<Game> getAll(){
         ArrayList<Game> games = new ArrayList();
-        allGames.forEach((key, value)->{
-            games.add(value);
-        });
+        for (int i = 0; i < allGames.size(); i++)
+        {
+            games.add(allGames.get(i));
+        }
+
+
+//        allGames.forEach((key, value)->{
+//            games.add(value);
+//        });
         return games;
     }
     public void deleteAll(){

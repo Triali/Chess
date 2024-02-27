@@ -20,7 +20,7 @@ public class AuthTokenList implements AuthTokenDAO
 
     }
 
-    public void insert(String userName) throws DataAccessException
+    public String insert(String userName) throws DataAccessException
     {
 
 
@@ -30,6 +30,7 @@ AuthToken temptoken = new AuthToken(userName);
         }else{
             AuthToken newToken = new AuthToken(userName);
             allTokens.put(newToken.getAuthToken(),newToken);
+            return newToken.getAuthToken();
         }
 
 

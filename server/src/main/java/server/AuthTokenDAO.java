@@ -8,7 +8,7 @@ public interface AuthTokenDAO
 {
     public AuthToken get(String authToken) throws DataAccessException;
 
-    public void insert(String userName) throws DataAccessException;
+    public String insert(String userName) throws DataAccessException;
 
     public void insert(AuthToken token) throws DataAccessException;
 

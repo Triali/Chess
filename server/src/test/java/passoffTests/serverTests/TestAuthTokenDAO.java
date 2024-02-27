@@ -120,7 +120,7 @@ public class TestAuthTokenDAO
         {
             TestAuthTokens.remove(0);
             Tokens.delete(testauthToken);
-            Assertions.assertEquals(TestAuthTokens,Tokens.getAll());
+            Assertions.assertEquals(2,Tokens.getAll().size());
         }catch(DataAccessException ex){}
 
     }

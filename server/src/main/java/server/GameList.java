@@ -1,8 +1,7 @@
 package server;
 
-import chess.ChessGame;
 import dataAccess.DataAccessException;
-import server.Game;
+import model.Game;
 import java.util.*;
 
 public class GameList implements GameDAO
@@ -19,7 +18,7 @@ public class GameList implements GameDAO
         }
 
     }
-    public void insert(String name) throws DataAccessException
+    public int insert(String name) throws DataAccessException
     {
         Game newGame = new Game(name);
         if(newGame.getID() == -1)
@@ -33,6 +32,7 @@ public class GameList implements GameDAO
             throw new DataAccessException("Element already exists");
         }else{
             allGames.put(id,newGame);
+            return id;
         }
     }
 
@@ -55,7 +55,7 @@ public class GameList implements GameDAO
     {
         if(ID < 0 || ID >= allGames.size())
         {
-            throw new DataAccessException("Can not add username to existing game");
+            throw new DataAccessException("bad request");
         }
         Game game = allGames.get(ID);
         if(color == "BLACK"){

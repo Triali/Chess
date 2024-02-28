@@ -1,10 +1,10 @@
 package server;
 
 import dataAccess.DataAccessException;
+import model.AuthToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class AuthTokenList implements AuthTokenDAO
 {

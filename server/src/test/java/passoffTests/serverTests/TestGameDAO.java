@@ -1,8 +1,7 @@
 package passoffTests.serverTests;
-import chess.ChessGame;
 import dataAccess.DataAccessException;
 import org.junit.jupiter.api.*;
-import server.Game;
+import model.Game;
 import server.GameDAO;
 import server.GameList;
 

@@ -1,6 +1,8 @@
 package server;
 
 import dataAccess.DataAccessException;
+import model.Game;
+import model.User;
 
 import java.util.ArrayList;
 
@@ -56,8 +58,13 @@ public String getPassword(String username) throws DataAccessException{
 public ArrayList<Game> getAllGames(){
 return games.getAll();
 }
-public void CreateGame(String gameName)throws DataAccessException{
-    games.insert(gameName);
+
+public ArrayList<Game> ListGames(String token)throws DataAccessException{
+    getUserName(token);
+    return getAllGames();
+}
+public int CreateGame(String gameName)throws DataAccessException{
+    return games.insert(gameName);
 
 }
 
@@ -100,7 +107,7 @@ public void UpdateUsername(int gameID, String color, String username)throws Data
 
     public void JoinGame(JoinGameRequest joinGame, String authToken)throws DataAccessException{
         String name = getUser(authToken).getUserName();
-        UpdateUsername(joinGame.getGameID(), joinGame.getColor(), name);
+        UpdateUsername(joinGame.getGameID(), joinGame.getPlayerColor(), name);
     }
 
 

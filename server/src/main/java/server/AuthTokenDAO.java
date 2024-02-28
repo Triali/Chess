@@ -1,6 +1,7 @@
 package server;
 
 import dataAccess.DataAccessException;
+import model.AuthToken;
 
 import java.util.ArrayList;
 

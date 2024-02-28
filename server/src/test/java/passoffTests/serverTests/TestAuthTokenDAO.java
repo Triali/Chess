@@ -1,6 +1,7 @@
 package passoffTests.serverTests;
 
 import dataAccess.DataAccessException;
+import model.AuthToken;
 import org.junit.jupiter.api.*;
 import server.*;
 

@@ -9,10 +9,10 @@ public class GameList implements GameDAO
 {
     HashMap<Integer, Game> allGames = new HashMap();
 
-    public Game get(int ID) throws DataAccessException
+    public Game get(int id) throws DataAccessException
     {
-        if(allGames.containsKey(ID)){
-            return allGames.get(ID);
+        if(allGames.containsKey(id)){
+            return allGames.get(id);
         }
         else{
             throw new DataAccessException("Element not found");
@@ -37,10 +37,10 @@ public class GameList implements GameDAO
         }
     }
 
-    public void delete(int ID) throws DataAccessException
+    public void delete(int id) throws DataAccessException
     {
-        if(allGames.containsKey(ID)){
-            allGames.remove(ID);
+        if(allGames.containsKey(id)){
+            allGames.remove(id);
         }
         else{
             throw new DataAccessException("Element not found");
@@ -48,30 +48,30 @@ public class GameList implements GameDAO
 
 
 
-        allGames.remove(ID);
+        allGames.remove(id);
 
     }
 
-    public void post(int ID, String color,String username)throws DataAccessException
+    public void post(int id, String color, String username)throws DataAccessException
     {
-        if(ID <= 0)
+        if(id <= 0)
         {
             throw new DataAccessException("bad request");
 
         }
-        Game game = allGames.get(ID);
+        Game game = allGames.get(id);
         if(color == null){
             //observer
             return;
         }
         if(color.equals("BLACK")){
-            if(allGames.get(ID).getBlackUsername()==null){
-                allGames.get(ID).setBlackUsername(username);
+            if(allGames.get(id).getBlackUsername()==null){
+                allGames.get(id).setBlackUsername(username);
                 return;
             }
         }else if (color.equals("WHITE")){
-            if(allGames.get(ID).getWhiteUsername()==null){
-                allGames.get(ID).setWhiteUsername(username);
+            if(allGames.get(id).getWhiteUsername()==null){
+                allGames.get(id).setWhiteUsername(username);
                 return;
             }
         }

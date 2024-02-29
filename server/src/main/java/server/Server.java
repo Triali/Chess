@@ -8,13 +8,13 @@ import com.google.gson.Gson;
 
 public class Server
 {
-    private Handlers handle;
+
     private Services services;
 
 
     public Server()
     {
-        handle = new Handlers();
+
         services = new Services();
     }
 
@@ -51,7 +51,7 @@ public class Server
 
     public Object ClearAll(Request req, Response res)
     {
-        services.ClearAll();
+        services.clearAll();
         res.status(200);
         return "{}";
     }
@@ -61,7 +61,7 @@ public class Server
         User newUser = new Gson().fromJson(req.body(), User.class);
         try
         {
-            String auth = services.Register(newUser);
+            String auth = services.register(newUser);
             res.status(200);
             String gson = new Gson().toJson(new LoginResponce(newUser.getUsername(), auth));
             return gson;
@@ -86,7 +86,7 @@ public class Server
 
         try
         {
-            String auth = services.Login(login);
+            String auth = services.login(login);
             res.status(200);
             return new Gson().toJson(new LoginResponce(login.getUsername(), auth));
         } catch (IllegalArgumentException | DataAccessException ex)
@@ -106,7 +106,7 @@ public class Server
         String token = req.headers("authorization");
         try
         {
-            services.Logout(token);
+            services.logout(token);
             res.status(200);
             return "";
         } catch (DataAccessException ex)
@@ -126,7 +126,7 @@ public class Server
         String token = req.headers("authorization");
         try
         {
-            return new Gson().toJson(services.ListGames(token));
+            return new Gson().toJson(services.listGames(token));
         } catch (DataAccessException ex)
         {
             res.status(401);
@@ -144,7 +144,7 @@ public class Server
         CreateGameRequest login = new Gson().fromJson(req.body(), CreateGameRequest.class);
         try
         {
-            int ID = services.CreateGame(login.gameName(), token);
+            int ID = services.createGame(login.gameName(), token);
             return "{ \"gameID\":" + ID + " }";
         } catch (DataAccessException ex)
         {
@@ -163,7 +163,7 @@ public class Server
         JoinGameRequest join = new Gson().fromJson(req.body(), JoinGameRequest.class);
         try
         {
-            services.JoinGame(join, token);
+            services.joinGame(join, token);
             res.status(200);
             return "{}";
         } catch (DataAccessException ex)

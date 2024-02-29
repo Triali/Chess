@@ -1,7 +1,6 @@
 package server;
 
 import dataAccess.DataAccessException;
-import model.AuthToken;
 import model.Game;
 import model.User;
 
@@ -24,10 +23,10 @@ public User getUser(String username) throws DataAccessException{
         return users;
     }
 
-    public void CreateUser(String username, String password, String email) throws DataAccessException{
+    public void createUser(String username, String password, String email) throws DataAccessException{
     users.insert(username,password,email);
 }
-public String CreateAuthToken(String username) throws DataAccessException
+public String createAuthToken(String username) throws DataAccessException
 {
 
     return tokens.insert(username);
@@ -35,7 +34,7 @@ public String CreateAuthToken(String username) throws DataAccessException
 
 }
 
-public void ClearAll(){
+public void clearAll(){
     users.deleteAll();
     tokens.deleteAll();
     games.deleteAll();
@@ -46,7 +45,7 @@ public String getUserName(String authToken) throws DataAccessException
     return tokens.get(authToken).getUsername();
 }
 
-public void RemoveAuthToken(String authToken) throws DataAccessException
+public void removeAuthToken(String authToken) throws DataAccessException
 {
     tokens.delete(authToken);
 }
@@ -60,7 +59,7 @@ public ArrayList<Game> getAllGames(){
 return games.getAll();
 }
 
-public AllGamesReturn ListGames(String token)throws DataAccessException{
+public AllGamesReturn listGames(String token)throws DataAccessException{
     getUserName(token);
     ArrayList<Game> games = getAllGames();
 
@@ -76,13 +75,13 @@ public AllGamesReturn ListGames(String token)throws DataAccessException{
     }
     return new AllGamesReturn(gamesReturns);
 }
-public int CreateGame(String gameName,String token)throws DataAccessException{
+public int createGame(String gameName, String token)throws DataAccessException{
     getUserName(token);
     return games.insert(gameName);
 
 }
 
-public void UpdateUsername(int gameID, String color, String username)throws DataAccessException{
+public void updateUsername(int gameID, String color, String username)throws DataAccessException{
     games.post(gameID,color,username);
 }
 
@@ -91,7 +90,7 @@ public void UpdateUsername(int gameID, String color, String username)throws Data
         return tokens;
     }
 
-    public String Register(User loginRequest) throws Exception
+    public String register(User loginRequest) throws Exception
     {
         try{
 
@@ -101,13 +100,13 @@ public void UpdateUsername(int gameID, String color, String username)throws Data
             if(loginRequest.getUsername() == null|| loginRequest.getPassword()==null|| loginRequest.getEmail()==null){
                 throw new DataAccessException("bad request");
             }
-            CreateUser(loginRequest.getUsername(), loginRequest.getPassword(), loginRequest.getEmail());
-            return CreateAuthToken(loginRequest.getUsername());
+            createUser(loginRequest.getUsername(), loginRequest.getPassword(), loginRequest.getEmail());
+            return createAuthToken(loginRequest.getUsername());
         }
     }
 
-    public void Logout(String authToken)throws DataAccessException{
-        RemoveAuthToken(authToken);
+    public void logout(String authToken)throws DataAccessException{
+        removeAuthToken(authToken);
     }
 
     public GameDAO getGames()
@@ -115,18 +114,18 @@ public void UpdateUsername(int gameID, String color, String username)throws Data
         return games;
     }
 
-    public String Login(LoginRequest login)throws Exception{
+    public String login(LoginRequest login)throws Exception{
         String password  = getPassword(login.getUsername());
         if(!password.equals(login.getPassword())){
             throw new IllegalArgumentException("Incorrect Password");
         }
-        return CreateAuthToken(login.getUsername());
+        return createAuthToken(login.getUsername());
     }
 
-    public void JoinGame(JoinGameRequest joinGame, String authToken)throws DataAccessException{
+    public void joinGame(JoinGameRequest joinGame, String authToken)throws DataAccessException{
 
     String name = tokens.get(authToken).getUsername();
-        UpdateUsername(joinGame.getGameID(), joinGame.getPlayerColor(), name);
+        updateUsername(joinGame.getGameID(), joinGame.getPlayerColor(), name);
     }
 
 

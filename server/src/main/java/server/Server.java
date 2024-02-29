@@ -19,7 +19,7 @@ public class Server
     }
 
 
-    public Server run(int port)
+    public int run(int port)
     {
         Spark.port(port);
 
@@ -35,7 +35,7 @@ public class Server
 
 
         Spark.awaitInitialization();
-        return this;
+        return Spark.port();
     }
 
     public int port()

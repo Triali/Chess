@@ -1,6 +1,5 @@
 package chess;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
@@ -299,7 +298,7 @@ public class ChessPiece
             {
                 if (position.getRow() == backRow)
                 {
-                    possibleMoves.addAll(PawnPromote(position, next));
+                    possibleMoves.addAll(pawnPromote(position, next));
                 } else
                 {
                     possibleMoves.add(new ChessMove(position, next));
@@ -313,7 +312,7 @@ public class ChessPiece
         {
             if (position.getRow() == backRow)
             {
-                possibleMoves.addAll(PawnPromote(position, next));
+                possibleMoves.addAll(pawnPromote(position, next));
             } else
             {
                 if (position.getRow() == startRow && board.getPiece(next.addPosition(ahead)) == null)
@@ -329,7 +328,7 @@ public class ChessPiece
         return possibleMoves;
     }
 
-    private Collection<ChessMove> PawnPromote(ChessPosition start, ChessPosition end)
+    private Collection<ChessMove> pawnPromote(ChessPosition start, ChessPosition end)
     {
         HashSet<ChessMove> possibleMoves = new HashSet();
         possibleMoves.add(new ChessMove(start, end, PieceType.BISHOP));
@@ -339,7 +338,7 @@ public class ChessPiece
         return possibleMoves;
     }
 
-    private Collection<ChessMove> CheckAttacks(ChessPosition start){
+    private Collection<ChessMove> checkAttacks(ChessPosition start){
         HashSet<ChessMove> possibleMoves = new HashSet();
 
 

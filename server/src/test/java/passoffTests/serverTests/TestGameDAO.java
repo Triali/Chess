@@ -1,4 +1,4 @@
-package serviceTests;
+package passoffTests.serverTests;
 import dataAccess.DataAccessException;
 import org.junit.jupiter.api.*;
 import model.Game;

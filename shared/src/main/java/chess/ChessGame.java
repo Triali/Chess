@@ -29,7 +29,7 @@ public class ChessGame
         currentGame = board;
         this.currentTurn = currentTurn;
 
-        FindKings();
+        findKings();
     }
 
 
@@ -41,7 +41,7 @@ public class ChessGame
         return currentTurn;
     }
 
-    private void ChangeTeamTurn()
+    private void changeTeamTurn()
     {
         currentTurn = (currentTurn == TeamColor.WHITE) ? (TeamColor.BLACK) : (TeamColor.WHITE);
     }
@@ -124,7 +124,7 @@ public class ChessGame
     }
 
 
-    private Collection<ChessMove> AllValidMoves(TeamColor color)
+    private Collection<ChessMove> allValidMoves(TeamColor color)
     {
 //        System.out.println("running AllValidMoves");
         Collection<ChessMove> allValidMoves = new HashSet<>();
@@ -187,7 +187,7 @@ public class ChessGame
      */
     public void makeMove(ChessMove move) throws InvalidMoveException
     {
-        FindKings();
+        findKings();
         System.out.println("running makeMove");
         ChessPiece piece = currentGame.getPiece(move.getStartPosition());
         // check if it is a valid move
@@ -211,7 +211,7 @@ public class ChessGame
             currentGame.removePiece(move.getStartPosition());
 //            System.out.println("After Remove \n"+currentGame);
             currentGame.addPiece(move.getEndPosition(), piece);
-            ChangeTeamTurn();
+            changeTeamTurn();
 
             if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == TeamColor.BLACK)
             {
@@ -237,7 +237,7 @@ public class ChessGame
         this.blackKing = blackKing;
     }
 
-    public void FindKings()
+    public void findKings()
     {
         for (Map.Entry<ChessPosition, ChessPiece> entry : currentGame.getPieces().entrySet())
         {
@@ -277,20 +277,20 @@ public class ChessGame
      */
     public boolean isInCheck(TeamColor teamColor)
     {
-        FindKings();
+        findKings();
 //        System.out.println("running isInCheck");
         ChessPosition pos = (teamColor == TeamColor.WHITE) ? (getWhiteKing()) : (getBlackKing());
 
         System.out.println(pos);
 //        System.out.println("Diagonal " + CheckDiagonal(pos));
 //        System.out.println("Jumps " + CheckJumps(pos));
-        System.out.println("Pawns " + CheckPawns(pos));
+        System.out.println("Pawns " + checkPawns(pos));
 //        System.out.println("Straight " + CheckStraight(pos));
 //        System.out.println("King " + CheckKing(pos));
         System.out.println();
 
 
-        return (CheckDiagonal(pos) || CheckJumps(pos) || CheckPawns(pos) || CheckStraight(pos) || CheckKing(pos));
+        return (checkDiagonal(pos) || checkJumps(pos) || checkPawns(pos) || checkStraight(pos) || checkKing(pos));
     }
 
     /**
@@ -303,9 +303,9 @@ public class ChessGame
     {
 //        System.out.println("running isInCheckmate");
         // no valid moves and in check
-        System.out.println("Size " + AllValidMoves(teamColor));
+        System.out.println("Size " + allValidMoves(teamColor));
         System.out.println("Check " + isInCheck(teamColor));
-        return AllValidMoves(teamColor).isEmpty() && isInCheck(teamColor);
+        return allValidMoves(teamColor).isEmpty() && isInCheck(teamColor);
     }
 
     /**
@@ -319,7 +319,7 @@ public class ChessGame
     {
 //        System.out.println("running isInStalemate");
         // no valid moves and not in check
-        return AllValidMoves(teamColor).isEmpty() && !isInCheck(teamColor);
+        return allValidMoves(teamColor).isEmpty() && !isInCheck(teamColor);
     }
 
     /**
@@ -349,7 +349,7 @@ public class ChessGame
      * @param vector   the direction vector being checked
      * @param spaces   the number of spaces to check for
      */
-    public ChessPiece.PieceType CheckForAttack(ChessPosition startPos, int[] vector, int spaces)
+    public ChessPiece.PieceType checkForAttack(ChessPosition startPos, int[] vector, int spaces)
     {
 //        System.out.println("running CheckForAttack");
         ChessPosition pos = startPos;
@@ -388,12 +388,12 @@ public class ChessGame
 
     }
 
-    public Boolean CheckKing(ChessPosition startPos)
+    public Boolean checkKing(ChessPosition startPos)
     {
         int[] dir = new int[]{1, -1};
         for (int i = 0; i < 4; i++)
         {
-            if (CheckForAttack(startPos, dir, 1) == ChessPiece.PieceType.KING)
+            if (checkForAttack(startPos, dir, 1) == ChessPiece.PieceType.KING)
             {
                 return true;
             }
@@ -402,7 +402,7 @@ public class ChessGame
         dir = new int[]{1, 0};
         for (int i = 0; i < 4; i++)
         {
-            if (CheckForAttack(startPos, dir, 1) == ChessPiece.PieceType.KING)
+            if (checkForAttack(startPos, dir, 1) == ChessPiece.PieceType.KING)
             {
                 return true;
             }
@@ -413,13 +413,13 @@ public class ChessGame
 
     }
 
-    public Boolean CheckDiagonal(ChessPosition startPos)
+    public Boolean checkDiagonal(ChessPosition startPos)
     {
 //        System.out.println("running CheckDiagonal");
         int[] dir = new int[]{1, -1};
         for (int i = 0; i < 4; i++)
         {
-            if (CheckForAttack(startPos, dir, 8) == ChessPiece.PieceType.BISHOP || CheckForAttack(startPos, dir, 8) == ChessPiece.PieceType.QUEEN)
+            if (checkForAttack(startPos, dir, 8) == ChessPiece.PieceType.BISHOP || checkForAttack(startPos, dir, 8) == ChessPiece.PieceType.QUEEN)
             {
                 return true;
             }
@@ -428,13 +428,13 @@ public class ChessGame
         return false;
     }
 
-    public Boolean CheckStraight(ChessPosition startPos)
+    public Boolean checkStraight(ChessPosition startPos)
     {
 //        System.out.println("running CheckStraight");
         int[] dir = new int[]{1, 0};
         for (int i = 0; i < 4; i++)
         {
-            if (CheckForAttack(startPos, dir, 8) == ChessPiece.PieceType.ROOK || CheckForAttack(startPos, dir, 8) == ChessPiece.PieceType.QUEEN)
+            if (checkForAttack(startPos, dir, 8) == ChessPiece.PieceType.ROOK || checkForAttack(startPos, dir, 8) == ChessPiece.PieceType.QUEEN)
             {
 //                System.out.println(CheckForAttack(startPos,dir,8));
                 return true;
@@ -444,13 +444,13 @@ public class ChessGame
         return false;
     }
 
-    public Boolean CheckJumps(ChessPosition startPos)
+    public Boolean checkJumps(ChessPosition startPos)
     {
 //        System.out.println("running CheckJumps");
         int[] dir = new int[]{1, 2};
         for (int i = 0; i < 4; i++)
         {
-            if (CheckForAttack(startPos, dir, 1) == ChessPiece.PieceType.KNIGHT)
+            if (checkForAttack(startPos, dir, 1) == ChessPiece.PieceType.KNIGHT)
             {
                 return true;
             }
@@ -459,7 +459,7 @@ public class ChessGame
         int[] dir2 = new int[]{1, -2};
         for (int i = 0; i < 4; i++)
         {
-            if (CheckForAttack(startPos, dir2, 1) == ChessPiece.PieceType.KNIGHT)
+            if (checkForAttack(startPos, dir2, 1) == ChessPiece.PieceType.KNIGHT)
             {
                 return true;
             }
@@ -468,7 +468,7 @@ public class ChessGame
         return false;
     }
 
-    public Boolean CheckPawns(ChessPosition startPos)
+    public Boolean checkPawns(ChessPosition startPos)
     {
 //        System.out.println("running CheckPawns");
         try

@@ -144,8 +144,8 @@ public class Server
         CreateGameRequest login = new Gson().fromJson(req.body(), CreateGameRequest.class);
         try
         {
-            int ID = services.createGame(login.gameName(), token);
-            return "{ \"gameID\":" + ID + " }";
+            int id = services.createGame(login.gameName(), token);
+            return "{ \"gameID\":" + id + " }";
         } catch (DataAccessException ex)
         {
             res.status(401);

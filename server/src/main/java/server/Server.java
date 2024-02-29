@@ -1,9 +1,7 @@
 package server;
 
 
-import com.google.gson.JsonParseException;
 import dataAccess.DataAccessException;
-import model.AuthToken;
 import model.User;
 import spark.*;
 import com.google.gson.Gson;
@@ -25,7 +23,7 @@ public class Server
     {
         Spark.port(port);
 
-        Spark.staticFiles.location("public");
+        Spark.staticFiles.location("web");
 
         Spark.delete("/db", this::ClearAll);//clear all
         Spark.post("/user", this::Register);//register
@@ -55,7 +53,7 @@ public class Server
     {
         services.ClearAll();
         res.status(200);
-        return "";
+        return "{}";
     }
 
     public Object Register(Request req, Response res)
@@ -64,13 +62,18 @@ public class Server
         try
         {
             String auth = services.Register(newUser);
-
-            return new Gson().toJson(new LoginResponce(newUser.getUserName(), auth));
+            res.status(200);
+            String gson = new Gson().toJson(new LoginResponce(newUser.getUsername(), auth));
+            return gson;
         } catch (IllegalArgumentException iae)
         {
             res.status(403);
             return "{ \"message\": \"Error: already taken\" }";
-        } catch (Exception e)
+        } catch (DataAccessException ex){
+            res.status(400);
+            return "{ \"message\": \"Error: bad request\" }";
+        }
+        catch (Exception e)
         {
             res.status(400);
             return "{ \"message\": \"\" }";
@@ -100,7 +103,7 @@ public class Server
 
     public Object Logout(Request req, Response res)
     {
-        String token = req.headers("authorization:");
+        String token = req.headers("authorization");
         try
         {
             services.Logout(token);
@@ -110,7 +113,8 @@ public class Server
         {
             res.status(401);
             return "{ \"message\": \"Error: unauthorized\" }";
-        } catch (Exception iae){
+        } catch (Exception iae)
+        {
             res.status(500);
             return "{ \"message\": \"Error: description\" }";
         }
@@ -119,15 +123,16 @@ public class Server
 
     public Object ListGames(Request req, Response res)
     {
-        String token = req.headers("authorization:");
+        String token = req.headers("authorization");
         try
         {
             return new Gson().toJson(services.ListGames(token));
-        }catch (DataAccessException ex)
+        } catch (DataAccessException ex)
         {
             res.status(401);
             return "{ \"message\": \"Error: unauthorized\" }";
-        } catch (Exception iae){
+        } catch (Exception iae)
+        {
             res.status(500);
             return "{ \"message\": \"Error: description\" }";
         }
@@ -135,17 +140,18 @@ public class Server
 
     public Object CreateGame(Request req, Response res)
     {
-        String token = req.headers("authorization:");
-
+        String token = req.headers("authorization");
+        CreateGameRequest login = new Gson().fromJson(req.body(), CreateGameRequest.class);
         try
         {
-            int ID = services.CreateGame(req.params("gameName"));
+            int ID = services.CreateGame(login.gameName(), token);
             return "{ \"gameID\":" + ID + " }";
         } catch (DataAccessException ex)
         {
             res.status(401);
             return "{ \"message\": \"Error: unauthorized\" }";
-        } catch (Exception iae){
+        } catch (Exception iae)
+        {
             res.status(500);
             return "{ \"message\": \"Error: description\" }";
         }
@@ -153,31 +159,35 @@ public class Server
 
     public Object JoinGame(Request req, Response res)
     {
-        String token = req.headers("authorization:");
+        String token = req.headers("authorization");
         JoinGameRequest join = new Gson().fromJson(req.body(), JoinGameRequest.class);
         try
         {
-            services.JoinGame(join,token);
+            services.JoinGame(join, token);
             res.status(200);
-            return "";
+            return "{}";
         } catch (DataAccessException ex)
         {
-            if(ex.getMessage()=="bad request"){
-                res.status(400);
-                return "{ \"message\": \"Error: bad request\" }";
-            }
-            else if(ex.getMessage() == "Can not add username to existing game"){
+            if (ex.getMessage() == "bad color")
+            {
                 res.status(403);
                 return "{ \"message\": \"Error: already taken\" }";
             }
-            else if(ex.getMessage() == "Element not found"){
-            res.status(401);
-            return "{ \"message\": \"Error: unauthorized\" }";}
-            else{
+            else if (ex.getMessage() == "bad request" || ex.getMessage() == "Can not add username to existing game")
+            {
+                res.status(400);
+                return "{ \"message\": \"Error: bad request\" }";
+            } else if (ex.getMessage() == "Element not found")
+            {
+                res.status(401);
+                return "{ \"message\": \"Error: unauthorized\" }";
+            } else
+            {
                 res.status(500);
                 return "{ \"message\": \"Error: description\" }";
             }
-        } catch (Exception iae){
+        } catch (Exception iae)
+        {
             res.status(500);
             return "{ \"message\": \"Error: description\" }";
         }

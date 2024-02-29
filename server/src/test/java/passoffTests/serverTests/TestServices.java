@@ -37,17 +37,17 @@ public class TestServices
         services = new Services();
         try
         {
-            services.CreateGame("game1");
-            services.CreateGame("game2");
-            services.CreateGame("game3");
-
-            services.CreateUser("Harry", "H_username", "harry@email.com");
-            services.CreateUser("Spencer", "S_username", "spencer@email.com");
-            services.CreateUser("Jim", "J_username", "jim@email.com");
-
-            String hToken = services.CreateAuthToken("Harry");
-            String sToken = services.CreateAuthToken("Spencer");
-            String jToken = services.CreateAuthToken("Jim");
+//            services.CreateGame("game1");
+//            services.CreateGame("game2");
+//            services.CreateGame("game3");
+//
+//            services.CreateUser("Harry", "H_username", "harry@email.com");
+//            services.CreateUser("Spencer", "S_username", "spencer@email.com");
+//            services.CreateUser("Jim", "J_username", "jim@email.com");
+//
+//            String hToken = services.CreateAuthToken("Harry");
+//            String sToken = services.CreateAuthToken("Spencer");
+//            String jToken = services.CreateAuthToken("Jim");
 
         } catch (Exception ex)
         {

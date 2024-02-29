@@ -1,16 +1,20 @@
 package model;
 
+import chess.ChessBoard;
 import chess.ChessGame;
 
 import java.util.Objects;
 
 public class Game
 {
-    private ChessGame game;
-    private String name;
     private int ID = -1;
-    private String blackUsername = "";
-    private String whiteUsername ="";
+    private String blackUsername = null;
+    private String whiteUsername =null;
+    private String gameName = null;
+    private ChessGame game = null;
+
+
+
 
     public String getBlackUsername()
     {
@@ -34,18 +38,21 @@ public class Game
 
     public Game(String name)
     {
-        this.name = name;
-        game = new ChessGame();
+         ChessBoard board = new ChessBoard();
+         board.initalSetup();
+        this.gameName = name;
+        game = new ChessGame(board, ChessGame.TeamColor.WHITE);
+
     }
 
-    public String getName()
+    public String getGameName()
     {
-        return name;
+        return gameName;
     }
 
-    public void setName(String name)
+    public void setGameName(String gameName)
     {
-        this.name = name;
+        this.gameName = gameName;
     }
 
     public int getID()
@@ -71,7 +78,7 @@ public class Game
     @Override
     public String toString()
     {
-        return "Game{"+name +", "+ ID+'}';
+        return "Game{"+ gameName +", "+ ID+'}';
     }
 
     @Override

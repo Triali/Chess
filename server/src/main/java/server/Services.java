@@ -1,6 +1,7 @@
 package server;
 
 import dataAccess.DataAccessException;
+import model.AuthToken;
 import model.Game;
 import model.User;
 
@@ -51,7 +52,7 @@ public void RemoveAuthToken(String authToken) throws DataAccessException
 }
 
 public String getPassword(String username) throws DataAccessException{
-    return users.get(username).getPassWord();
+    return users.get(username).getPassword();
 
 }
 
@@ -59,11 +60,24 @@ public ArrayList<Game> getAllGames(){
 return games.getAll();
 }
 
-public ArrayList<Game> ListGames(String token)throws DataAccessException{
+public AllGamesReturn ListGames(String token)throws DataAccessException{
     getUserName(token);
-    return getAllGames();
+    ArrayList<Game> games = getAllGames();
+
+    ArrayList<GameReturn> gamesReturns = new ArrayList();
+    if(games.isEmpty())
+    {
+        return new AllGamesReturn(gamesReturns);
+    }
+    for(int i=0; i < games.size();i++)
+    {
+        gamesReturns.add(new GameReturn(games.get(i).getID(), games.get(i).getWhiteUsername(), games.get(i).getBlackUsername(), games.get(i).getGameName()));
+
+    }
+    return new AllGamesReturn(gamesReturns);
 }
-public int CreateGame(String gameName)throws DataAccessException{
+public int CreateGame(String gameName,String token)throws DataAccessException{
+    getUserName(token);
     return games.insert(gameName);
 
 }
@@ -80,11 +94,15 @@ public void UpdateUsername(int gameID, String color, String username)throws Data
     public String Register(User loginRequest) throws Exception
     {
         try{
-            getUser(loginRequest.getUserName());
+
+            getUser(loginRequest.getUsername());
             throw new IllegalArgumentException("Username already exists");
         }catch( DataAccessException ex){
-            CreateUser(loginRequest.getUserName(), loginRequest.getPassWord(), loginRequest.getEmail());
-            return CreateAuthToken(loginRequest.getUserName());
+            if(loginRequest.getUsername() == null|| loginRequest.getPassword()==null|| loginRequest.getEmail()==null){
+                throw new DataAccessException("bad request");
+            }
+            CreateUser(loginRequest.getUsername(), loginRequest.getPassword(), loginRequest.getEmail());
+            return CreateAuthToken(loginRequest.getUsername());
         }
     }
 
@@ -99,14 +117,15 @@ public void UpdateUsername(int gameID, String color, String username)throws Data
 
     public String Login(LoginRequest login)throws Exception{
         String password  = getPassword(login.getUsername());
-        if(password != login.getPassword()){
+        if(!password.equals(login.getPassword())){
             throw new IllegalArgumentException("Incorrect Password");
         }
         return CreateAuthToken(login.getUsername());
     }
 
     public void JoinGame(JoinGameRequest joinGame, String authToken)throws DataAccessException{
-        String name = getUser(authToken).getUserName();
+
+    String name = tokens.get(authToken).getUsername();
         UpdateUsername(joinGame.getGameID(), joinGame.getPlayerColor(), name);
     }
 

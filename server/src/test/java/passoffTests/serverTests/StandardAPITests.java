@@ -43,7 +43,7 @@ public class StandardAPITests {
         var port = server.run(0);
         System.out.println("Started test HTTP server on " + port);
 
-        serverFacade = new TestServerFacade("localhost", Integer.toString(port));
+        serverFacade = new TestServerFacade("localhost", Integer.toString(port.port()));
 
         existingUser = new TestModels.TestUser();
         existingUser.username = "ExistingUser";

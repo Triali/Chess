@@ -9,12 +9,14 @@ import java.util.HashMap;
 public class AuthTokenList implements AuthTokenDAO
 {
     HashMap<String, AuthToken> allTokens = new HashMap();
+
     public AuthToken get(String authToken) throws DataAccessException
     {
-        if(allTokens.containsKey(authToken)){
+        if (allTokens.containsKey(authToken))
+        {
             return allTokens.get(authToken);
-        }
-        else{
+        } else
+        {
             throw new DataAccessException("Element not found");
         }
 
@@ -22,27 +24,19 @@ public class AuthTokenList implements AuthTokenDAO
 
     public String insert(String userName) throws DataAccessException
     {
-
-
-AuthToken temptoken = new AuthToken(userName);
-        if(allTokens.containsValue(temptoken)){
-            throw new DataAccessException("Element already exists");
-        }else{
             AuthToken newToken = new AuthToken(userName);
-            allTokens.put(newToken.getAuthToken(),newToken);
+            allTokens.put(newToken.getAuthToken(), newToken);
             return newToken.getAuthToken();
-        }
-
-
-    }
+     }
 
     public void delete(String authToken) throws DataAccessException
     {
 
-        if(allTokens.containsKey(authToken)){
+        if (allTokens.containsKey(authToken))
+        {
             allTokens.remove(authToken);
-        }
-        else{
+        } else
+        {
             throw new DataAccessException("Element not found");
         }
 
@@ -50,18 +44,23 @@ AuthToken temptoken = new AuthToken(userName);
 
     public void insert(AuthToken token) throws DataAccessException
     {
-        if(allTokens.containsKey(token.getAuthToken())){
+        if (allTokens.containsKey(token.getAuthToken()))
+        {
             throw new DataAccessException("Element already exists");
-        }else{
+        } else
+        {
 //            AuthToken newToken = new AuthToken(userName);
-            allTokens.put(token.getAuthToken(),token);
+            allTokens.put(token.getAuthToken(), token);
         }
 
     }
-    public String allToString(){
+
+    public String allToString()
+    {
         String alltokens = new String();
-        allTokens.forEach((key,value)-> {
-            alltokens.concat(value.toString()+"\n");
+        allTokens.forEach((key, value) ->
+        {
+            alltokens.concat(value.toString() + "\n");
         });
         return alltokens;
     }
@@ -76,9 +75,11 @@ AuthToken temptoken = new AuthToken(userName);
 
     }
 
-    public ArrayList<AuthToken> getAll(){
+    public ArrayList<AuthToken> getAll()
+    {
         ArrayList<AuthToken> tokens = new ArrayList();
-        allTokens.forEach((key, value)->{
+        allTokens.forEach((key, value) ->
+        {
             tokens.add(value);
         });
         return tokens;

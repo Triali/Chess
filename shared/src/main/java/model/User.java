@@ -4,13 +4,13 @@ import java.util.Objects;
 
 public class User
 {
-    private String userName;
-    private String passWord;
+    private String username;
+    private String password;
     private String email;
 
-    public String getPassWord()
+    public String getPassword()
     {
-        return passWord;
+        return password;
     }
 
     public String getEmail()
@@ -18,10 +18,10 @@ public class User
         return email;
     }
 
-    public User(String userName, String passWord, String email)
+    public User(String username, String password, String email)
     {
-        this.userName = userName;
-        this.passWord = passWord;
+        this.username = username;
+        this.password = password;
         this.email = email;
     }
 
@@ -29,15 +29,15 @@ public class User
     public String toString()
     {
         return "User{" +
-                "userName='" + userName + '\'' +
-                ", passWord='" + passWord + '\'' +
+                "userName='" + username + '\'' +
+                ", passWord='" + password + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }
 
-    public String getUserName()
+    public String getUsername()
     {
-        return userName;
+        return username;
     }
 
     @Override
@@ -46,12 +46,12 @@ public class User
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(userName, user.userName) && Objects.equals(passWord, user.passWord) && Objects.equals(email, user.email);
+        return Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(userName, passWord, email);
+        return Objects.hash(username, password, email);
     }
 }

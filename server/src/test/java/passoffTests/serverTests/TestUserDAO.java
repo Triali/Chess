@@ -132,7 +132,7 @@ public class TestUserDAO
         String testString = new String();
         for (User user : TestUsers)
         {
-            testString.concat(user.getUserName() + " : " + user);
+            testString.concat(user.getUsername() + " : " + user);
 
         }
         Assertions.assertEquals(testString, Users.printAll());

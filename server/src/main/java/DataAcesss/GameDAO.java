@@ -1,4 +1,4 @@
-package server;
+package DataAcesss;
 
 import dataAccess.DataAccessException;
 import model.Game;

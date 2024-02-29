@@ -1,9 +1,10 @@
 package serviceTests;
 
+import DataAcesss.UserDAO;
+import DataAcesss.UserList;
 import dataAccess.DataAccessException;
 import model.User;
 import org.junit.jupiter.api.*;
-import server.*;
 
 import java.util.ArrayList;
 

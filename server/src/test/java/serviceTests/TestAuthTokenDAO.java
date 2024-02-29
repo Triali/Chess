@@ -1,9 +1,10 @@
 package serviceTests;
 
+import DataAcesss.AuthTokenDAO;
+import DataAcesss.AuthTokenList;
 import dataAccess.DataAccessException;
 import model.AuthToken;
 import org.junit.jupiter.api.*;
-import server.*;
 
 import java.util.ArrayList;
 

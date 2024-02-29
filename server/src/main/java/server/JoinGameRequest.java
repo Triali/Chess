@@ -18,10 +18,10 @@ public class JoinGameRequest
         return playerColor;
     }
 
-    public void setPlayerColor(String playerColor)
-    {
-        this.playerColor = playerColor;
-    }
+//    public void setPlayerColor(String playerColor)
+//    {
+//        this.playerColor = playerColor;
+//    }
 
     @Override
     public boolean equals(Object o)
@@ -43,8 +43,5 @@ public class JoinGameRequest
         return gameID;
     }
 
-    public void setGameID(int gameID)
-    {
-        this.gameID = gameID;
-    }
+
 }

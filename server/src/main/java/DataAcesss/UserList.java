@@ -1,5 +1,6 @@
-package server;
+package DataAcesss;
 
+import DataAcesss.UserDAO;
 import dataAccess.DataAccessException;
 import model.User;
 
@@ -47,10 +48,6 @@ public class UserList implements UserDAO
         else{
             throw new DataAccessException("Element not found");
         }
-
-    }
-    public void post()
-    {
 
     }
     public String printAll(){

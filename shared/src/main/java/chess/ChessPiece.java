@@ -145,11 +145,6 @@ public class ChessPiece
         return print;
     }
 
-
-    // checking pieces on diagonals given a distance
-    // checking pieces on the straights given a distance
-    // checking pieces on the kights jumps
-
     private Collection<ChessMove> checkDiagonals(ChessBoard board, ChessPosition startPos, int spaces)
     {
         HashSet<ChessMove> possibleMoves = new HashSet();

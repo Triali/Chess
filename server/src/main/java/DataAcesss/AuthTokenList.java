@@ -1,5 +1,6 @@
-package server;
+package DataAcesss;
 
+import DataAcesss.AuthTokenDAO;
 import dataAccess.DataAccessException;
 import model.AuthToken;
 
@@ -68,11 +69,6 @@ public class AuthTokenList implements AuthTokenDAO
     public void deleteAll()
     {
         allTokens.clear();
-    }
-
-    public void post()
-    {
-
     }
 
     public ArrayList<AuthToken> getAll()

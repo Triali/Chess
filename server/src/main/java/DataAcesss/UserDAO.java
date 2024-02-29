@@ -1,4 +1,4 @@
-package server;
+package DataAcesss;
 
 import dataAccess.DataAccessException;
 import model.User;
@@ -16,7 +16,6 @@ public interface UserDAO
 
     public void delete(String userName) throws DataAccessException;
 
-    public void post();
 
     public String printAll();
 

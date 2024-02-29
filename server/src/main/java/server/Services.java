@@ -1,5 +1,6 @@
 package server;
 
+import DataAcesss.*;
 import dataAccess.DataAccessException;
 import model.Game;
 import model.User;

@@ -1,5 +1,6 @@
-package server;
+package DataAcesss;
 
+import DataAcesss.GameDAO;
 import dataAccess.DataAccessException;
 import model.Game;
 import java.util.*;

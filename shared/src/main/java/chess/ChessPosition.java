@@ -49,17 +49,10 @@ public class ChessPosition {
     @Override
     public String toString()
     {
-//char col = '`';
-//col += this.col;
-//return Integer.toString(this.row)+col;
         return "{"+row+", "+col+"}";
     }
 
-//    @Override
-//    public int hashCode() {
-//        return this.hashCode;
-////        return super.hashCode();
-//    }
+
 
 
     @Override

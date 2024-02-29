@@ -1,4 +1,4 @@
-package server;
+package DataAcesss;
 
 import dataAccess.DataAccessException;
 import model.AuthToken;
@@ -14,8 +14,6 @@ public interface AuthTokenDAO
     public void insert(AuthToken token) throws DataAccessException;
 
     public void delete(String authToken) throws DataAccessException;
-
-    public void post();
 
     public ArrayList<AuthToken> getAll();
 

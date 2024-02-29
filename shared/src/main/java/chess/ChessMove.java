@@ -60,10 +60,6 @@ public class ChessMove
         return Objects.hash(start, end, promotionPiece);
     }
 
-    public void setPromotionPiece(ChessPiece.PieceType promotionPiece)
-    {
-        this.promotionPiece = promotionPiece;
-    }
 
     /**
      * Gets the type of piece to promote a pawn to if pawn promotion is part of this

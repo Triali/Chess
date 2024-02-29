@@ -12,11 +12,8 @@ public class ChessGame
 {
     private ChessBoard currentGame;
     private TeamColor currentTurn;
-
     private ChessPosition blackKing;
     private ChessPosition whiteKing;
-    private ChessMove lastMove;
-
 
     public ChessGame()
     {
@@ -32,15 +29,13 @@ public class ChessGame
         findKings();
     }
 
-
     /**
      * @return Which team's turn it is
      */
-    public TeamColor getTeamTurn()
-    {
-        return currentTurn;
-    }
-
+//    public TeamColor getTeamTurn()
+//    {
+//        return currentTurn;
+//    }
     private void changeTeamTurn()
     {
         currentTurn = (currentTurn == TeamColor.WHITE) ? (TeamColor.BLACK) : (TeamColor.WHITE);
@@ -58,17 +53,13 @@ public class ChessGame
     @Override
     public int hashCode()
     {
-        return Objects.hash(currentGame, currentTurn, blackKing, whiteKing, lastMove);
+        return Objects.hash(currentGame, currentTurn, blackKing, whiteKing);
     }
 
     @Override
     public String toString()
     {
-        return "ChessGame{" +
-                "currentGame=" + currentGame +
-                ", currentTurn=" + currentTurn +
-                ", lastMove=" + lastMove +
-                '}';
+        return "ChessGame{" + "currentGame=" + currentGame + ", currentTurn=" + currentTurn + ", lastMove="+ '}';
     }
 
     /**
@@ -86,8 +77,7 @@ public class ChessGame
      */
     public enum TeamColor
     {
-        WHITE,
-        BLACK
+        WHITE, BLACK
     }
 
     /**
@@ -126,12 +116,10 @@ public class ChessGame
 
     private Collection<ChessMove> allValidMoves(TeamColor color)
     {
-//        System.out.println("running AllValidMoves");
         Collection<ChessMove> allValidMoves = new HashSet<>();
         Iterator<Map.Entry<ChessPosition, ChessPiece>> it = currentGame.getPieces().entrySet().iterator();
         for (int row = 8; row >= 1; row--)
         {
-
             for (int col = 1; col <= 8; col++)
             {
                 ChessPosition pos = new ChessPosition(row, col);
@@ -142,13 +130,6 @@ public class ChessGame
                 }
             }
         }
-
-
-//        for(Map.Entry<ChessPosition,ChessPiece> entry:currentGame.getPieces().entrySet()){
-//            if(entry.getValue().getTeamColor()==color){
-//                allValidMoves.addAll(validMoves(entry.getKey()));
-//            }
-//        }
         return allValidMoves;
     }
 
@@ -232,11 +213,6 @@ public class ChessGame
         return blackKing;
     }
 
-    public void setBlackKing(ChessPosition blackKing)
-    {
-        this.blackKing = blackKing;
-    }
-
     public void findKings()
     {
         for (Map.Entry<ChessPosition, ChessPiece> entry : currentGame.getPieces().entrySet())
@@ -253,16 +229,11 @@ public class ChessGame
                 {
                     blackKing = entry.getKey();
                 }
-
             }
         }
-
     }
 
-    public void setWhiteKing(ChessPosition whiteKing)
-    {
-        this.whiteKing = whiteKing;
-    }
+
 
     public ChessPosition getWhiteKing()
     {
@@ -317,8 +288,6 @@ public class ChessGame
      */
     public boolean isInStalemate(TeamColor teamColor)
     {
-//        System.out.println("running isInStalemate");
-        // no valid moves and not in check
         return allValidMoves(teamColor).isEmpty() && !isInCheck(teamColor);
     }
 
@@ -409,8 +378,6 @@ public class ChessGame
             dir = rotate90(dir);
         }
         return false;
-
-
     }
 
     public Boolean checkDiagonal(ChessPosition startPos)
@@ -436,7 +403,6 @@ public class ChessGame
         {
             if (checkForAttack(startPos, dir, 8) == ChessPiece.PieceType.ROOK || checkForAttack(startPos, dir, 8) == ChessPiece.PieceType.QUEEN)
             {
-//                System.out.println(CheckForAttack(startPos,dir,8));
                 return true;
             }
             dir = rotate90(dir);

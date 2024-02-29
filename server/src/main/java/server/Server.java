@@ -25,13 +25,13 @@ public class Server
 
         Spark.staticFiles.location("web");
 
-        Spark.delete("/db", this::ClearAll);//clear all
-        Spark.post("/user", this::Register);//register
-        Spark.post("/session", this::Login);//login
-        Spark.delete("/session", this::Logout);//logout
-        Spark.get("/game", this::ListGames);//list games
-        Spark.post("/game", this::CreateGame);//create game
-        Spark.put("/game", this::JoinGame);//join game
+        Spark.delete("/db", this::clearAll);//clear all
+        Spark.post("/user", this::register);//register
+        Spark.post("/session", this::login);//login
+        Spark.delete("/session", this::logout);//logout
+        Spark.get("/game", this::listGames);//list games
+        Spark.post("/game", this::createGame);//create game
+        Spark.put("/game", this::joinGame);//join game
 
 
         Spark.awaitInitialization();
@@ -49,14 +49,14 @@ public class Server
         Spark.awaitStop();
     }
 
-    public Object ClearAll(Request req, Response res)
+    public Object clearAll(Request req, Response res)
     {
         services.clearAll();
         res.status(200);
         return "{}";
     }
 
-    public Object Register(Request req, Response res)
+    public Object register(Request req, Response res)
     {
         User newUser = new Gson().fromJson(req.body(), User.class);
         try
@@ -80,7 +80,7 @@ public class Server
         }
     }
 
-    public Object Login(Request req, Response res)
+    public Object login(Request req, Response res)
     {
         LoginRequest login = new Gson().fromJson(req.body(), LoginRequest.class);
 
@@ -101,7 +101,7 @@ public class Server
 
     }
 
-    public Object Logout(Request req, Response res)
+    public Object logout(Request req, Response res)
     {
         String token = req.headers("authorization");
         try
@@ -121,7 +121,7 @@ public class Server
 
     }
 
-    public Object ListGames(Request req, Response res)
+    public Object listGames(Request req, Response res)
     {
         String token = req.headers("authorization");
         try
@@ -138,7 +138,7 @@ public class Server
         }
     }
 
-    public Object CreateGame(Request req, Response res)
+    public Object createGame(Request req, Response res)
     {
         String token = req.headers("authorization");
         CreateGameRequest login = new Gson().fromJson(req.body(), CreateGameRequest.class);
@@ -157,7 +157,7 @@ public class Server
         }
     }
 
-    public Object JoinGame(Request req, Response res)
+    public Object joinGame(Request req, Response res)
     {
         String token = req.headers("authorization");
         JoinGameRequest join = new Gson().fromJson(req.body(), JoinGameRequest.class);

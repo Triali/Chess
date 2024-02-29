@@ -1,3 +1,5 @@
+package serviceTests;
+
 import dataAccess.DataAccessException;
 import model.Game;
 import model.User;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class serviceTests
+public class ServiceTests
 {
     Services services;
     String hToken;

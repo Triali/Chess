@@ -10,13 +10,13 @@ public interface GameDAO
 
     public Game get(int id) throws DataAccessException;
 
-    public int insert(String name) throws DataAccessException;
+    public void insert(Game game) throws DataAccessException;
 
     public void delete(int id) throws DataAccessException;
 
-    public void post(int id, String color,String username) throws DataAccessException;
-
-    public ArrayList<Game> getAll();
-
-    public void deleteAll();
+    public void postBlack(int id,String username)throws DataAccessException;
+    public void postWhite(int id,String username)throws DataAccessException;
+    public void postObserver(int id, String username)throws DataAccessException;
+    public void clear();
+    public ArrayList<Game> getAllGames();
 }

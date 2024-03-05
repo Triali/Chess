@@ -1,134 +1,127 @@
-package server;
+package Server;
 
 import DataAcesss.*;
 import dataAccess.DataAccessException;
+import model.AuthToken;
 import model.Game;
 import model.User;
+import records.*;
 
 import java.util.ArrayList;
 
 public class Services
 {
-
     UserDAO users = new UserList();
     GameDAO games = new GameList();
     AuthTokenDAO tokens = new AuthTokenList();
 
-
-public User getUser(String username) throws DataAccessException{
-        return users.get(username);
-}
-
-    public UserDAO getUsers()
+    //helpers
+    public AuthToken createAuthToken(String username) throws DataAccessException
     {
-        return users;
+        AuthToken token = new AuthToken(username);
+        tokens.insert(token);
+        return token;
+    }
+    public boolean doesUserExists(String username)
+    {
+        try
+        {
+            users.get(username);
+            return true;
+        } catch (Exception ex)
+        {
+            return false;
+        }
     }
 
-    public void createUser(String username, String password, String email) throws DataAccessException{
-    users.insert(username,password,email);
-}
-public String createAuthToken(String username) throws DataAccessException
-{
-
-    return tokens.insert(username);
-
-
-}
-
-public void clearAll(){
-    users.deleteAll();
-    tokens.deleteAll();
-    games.deleteAll();
-}
-
-public String getUserName(String authToken) throws DataAccessException
-{
-    return tokens.get(authToken).getUsername();
-}
-
-public void removeAuthToken(String authToken) throws DataAccessException
-{
-    tokens.delete(authToken);
-}
-
-public String getPassword(String username) throws DataAccessException{
-    return users.get(username).getPassword();
-
-}
-
-public ArrayList<Game> getAllGames(){
-return games.getAll();
-}
-
-public AllGamesReturn listGames(String token)throws DataAccessException{
-    getUserName(token);
-    ArrayList<Game> games = getAllGames();
-
-    ArrayList<GameReturn> gamesReturns = new ArrayList();
-    if(games.isEmpty())
+    //Services
+    public LoginResponce login(LoginRequest login) throws Exception
     {
-        return new AllGamesReturn(gamesReturns);
+        User user= users.get(login.username());
+        String password = user.getPassword();
+        if (!password.equals(login.password()))
+        {
+            throw new IllegalArgumentException("Error: unauthorized");// TODO fix Error message
+        }
+        AuthToken token = createAuthToken(login.username());
+        return new LoginResponce(token.getUsername(), token.getAuthToken());
     }
-    for(int i=0; i < games.size();i++)
+    public void logout(String authToken) throws DataAccessException
     {
-        gamesReturns.add(new GameReturn(games.get(i).getID(), games.get(i).getWhiteUsername(), games.get(i).getBlackUsername(), games.get(i).getGameName()));
-
+        tokens.delete(authToken);
     }
-    return new AllGamesReturn(gamesReturns);
-}
-public int createGame(String gameName, String token)throws DataAccessException{
-    getUserName(token);
-    return games.insert(gameName);
-
-}
-
-public void updateUsername(int gameID, String color, String username)throws DataAccessException{
-    games.post(gameID,color,username);
-}
-
-    public AuthTokenDAO getTokens()
+    public LoginResponce register(User login) throws Exception
     {
-        return tokens;
-    }
-
-    public String register(User loginRequest) throws Exception
-    {
-        try{
-
-            getUser(loginRequest.getUsername());
-            throw new IllegalArgumentException("Username already exists");
-        }catch( DataAccessException ex){
-            if(loginRequest.getUsername() == null|| loginRequest.getPassword()==null|| loginRequest.getEmail()==null){
-                throw new DataAccessException("bad request");
+        if (!doesUserExists(login.getUsername()))
+        {
+            if (login.getUsername() == null || login.getPassword() == null || login.getEmail() == null)
+            {
+                throw new DataAccessException("Error: bad request");//TODO fix error message
+            } else
+            {
+                users.insert(login);
+                AuthToken token = createAuthToken(login.getUsername());
+                return new LoginResponce(token.getUsername(), token.getAuthToken());
             }
-            createUser(loginRequest.getUsername(), loginRequest.getPassword(), loginRequest.getEmail());
-            return createAuthToken(loginRequest.getUsername());
+        } else
+        {
+            throw new DataAccessException("Error: already taken");
         }
     }
-
-    public void logout(String authToken)throws DataAccessException{
-        removeAuthToken(authToken);
-    }
-
-    public GameDAO getGames()
+    public void clearAll()
     {
-        return games;
+        users.clear();
+        tokens.clear();
+        games.clear();
     }
+    public void joinGame(JoinGameRequest joinGame, String authToken) throws DataAccessException
+    {
 
-    public String login(LoginRequest login)throws Exception{
-        String password  = getPassword(login.getUsername());
-        if(!password.equals(login.getPassword())){
-            throw new IllegalArgumentException("Incorrect Password");
+        String name = tokens.get(authToken).getUsername();
+        int id = joinGame.gameID();
+        String color = joinGame.playerColor();
+        if (id <= 0)
+        {
+            throw new DataAccessException("Error: bad request");//TODO fix error message
         }
-        return createAuthToken(login.getUsername());
+        games.get(id);
+        if (color == null)
+        {
+            games.postObserver(id, name);
+            return;
+        }
+        if (color.equals("BLACK"))
+        {
+            if (games.get(id).getBlackUsername() == null)
+            {
+                games.postBlack(id, name);
+                return;
+            }
+        } else if (color.equals("WHITE"))
+        {
+            if (games.get(id).getWhiteUsername() == null)
+            {
+                games.postWhite(id, name);
+                return;
+            }
+        }
+        throw new DataAccessException("Error: already taken");// TODO fix error message
     }
+    public AllGamesReturn listGames(String authToken) throws DataAccessException
+    {
+        tokens.get(authToken);
+        ArrayList<GameReturn> gameReturns = new ArrayList<>();
+        games.getAllGames().forEach((game)->{
+            gameReturns.add(new GameReturn(game.getID(), game.getWhiteUsername(), game.getBlackUsername(), game.getGameName()));
+        });
+        return new AllGamesReturn(gameReturns);
 
-    public void joinGame(JoinGameRequest joinGame, String authToken)throws DataAccessException{
-
-    String name = tokens.get(authToken).getUsername();
-        updateUsername(joinGame.getGameID(), joinGame.getPlayerColor(), name);
     }
-
-
-
+    public GameReturn createGame(String name, String authToken) throws DataAccessException
+    {
+        tokens.get(authToken);
+        Game game = new Game(name);
+        games.insert(game);
+        return new GameReturn(game.getID(), game.getWhiteUsername(), game.getBlackUsername(), game.getGameName());
+    }
 }

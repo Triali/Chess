@@ -10,16 +10,11 @@ public interface UserDAO
 
     public User get(String userName) throws DataAccessException;
 
-    public ArrayList<User> getAll();
-
-    public void insert(String userName, String password,String email) throws DataAccessException;
+    public void insert(User user) throws DataAccessException;
 
     public void delete(String userName) throws DataAccessException;
 
-
-    public String printAll();
-
-    public void deleteAll();
+    public void clear();
 
 
 

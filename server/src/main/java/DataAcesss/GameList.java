@@ -3,6 +3,7 @@ package DataAcesss;
 import DataAcesss.GameDAO;
 import dataAccess.DataAccessException;
 import model.Game;
+
 import java.util.*;
 
 public class GameList implements GameDAO
@@ -11,88 +12,64 @@ public class GameList implements GameDAO
 
     public Game get(int id) throws DataAccessException
     {
-        if(allGames.containsKey(id)){
-            return allGames.get(id);
-        }
-        else{
-            throw new DataAccessException("Element not found");
-        }
-
-    }
-    public int insert(String name) throws DataAccessException
-    {
-        Game newGame = new Game(name);
-        if(newGame.getID() == -1)
+        Game game = allGames.get(id);
+        if (game != null)
         {
-            newGame.setID(allGames.size()+1);
-
+            return game;
         }
-        int id = newGame.getID();
+        throw new DataAccessException("Error: unauthorized");
+    }
 
-        if(allGames.containsKey(id)){
+    public void insert(Game game) throws DataAccessException
+    {
+        if (game.getID() == -1)
+        {
+            game.setID(allGames.size() + 1);
+        }
+        int id = game.getID();
+
+        if (allGames.containsKey(id))
+        {
             throw new DataAccessException("Element already exists");
-        }else{
-            allGames.put(id,newGame);
-            return id;
+        } else
+        {
+            allGames.put(id, game);
         }
     }
 
     public void delete(int id) throws DataAccessException
     {
-        if(allGames.containsKey(id)){
-            allGames.remove(id);
-        }
-        else{
-            throw new DataAccessException("Element not found");
-        }
-
-
-
         allGames.remove(id);
-
     }
 
-    public void post(int id, String color, String username)throws DataAccessException
+    public void postWhite(int id, String username) throws DataAccessException
     {
-        if(id <= 0)
-        {
-            throw new DataAccessException("bad request");
-
-        }
-        Game game = allGames.get(id);
-        if(color == null){
-            //observer
-            return;
-        }
-        if(color.equals("BLACK")){
-            if(allGames.get(id).getBlackUsername()==null){
-                allGames.get(id).setBlackUsername(username);
-                return;
-            }
-        }else if (color.equals("WHITE")){
-            if(allGames.get(id).getWhiteUsername()==null){
-                allGames.get(id).setWhiteUsername(username);
-                return;
-            }
-        }
-        throw new DataAccessException("bad color");
-
+        allGames.get(id).setWhiteUsername(username);
     }
 
-    public ArrayList<Game> getAll(){
-        ArrayList<Game>  games = new ArrayList();
+    public void postBlack(int id, String username) throws DataAccessException
+    {
+        allGames.get(id).setBlackUsername(username);
+    }
+
+    public void postObserver(int id, String username) throws DataAccessException
+    {
+        allGames.get(id);
+    }
+
+    public void clear()
+    {
+        allGames.clear();
+    }
+
+    public ArrayList<Game> getAllGames()
+    {
+        ArrayList<Game> games = new ArrayList();
         for (int i = 1; i <= allGames.size(); i++)
         {
             games.add(allGames.get(i));
         }
-
-
-//        allGames.forEach((key, value)->{
-//            games.add(value);
-//        });
         return games;
     }
-    public void deleteAll(){
-        allGames.clear();
-    }
+
 }

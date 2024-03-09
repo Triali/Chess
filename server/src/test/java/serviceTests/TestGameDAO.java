@@ -15,6 +15,8 @@ public class TestGameDAO
     private static GameDAO games;
 
 
+
+
     public static void setup()
     {
         try
@@ -66,7 +68,8 @@ public class TestGameDAO
     @Test
     @DisplayName("Good Insert")
     public void insert()
-    {setup();
+    {
+        setup();
         Game game4 = new Game("game4");
         try
         {
@@ -96,7 +99,8 @@ public class TestGameDAO
         setup();
         Game game4 = new Game("game4");
         game4.setID(1);
-        Assertions.assertThrows(DataAccessException.class, () -> games.insert(game4));}
+        Assertions.assertThrows(DataAccessException.class, () -> games.insert(game4));
+    }
 
     @Test
     @DisplayName("Good Get")
@@ -135,7 +139,7 @@ public class TestGameDAO
     @DisplayName("Bad Get")
     public void badGet()
     {
-setup();
+        setup();
         Assertions.assertThrows(DataAccessException.class, () ->
         {
             games.get(4);
@@ -188,14 +192,14 @@ setup();
     public void BadDelete()
     {
         setup();
-        Collection<Game> gameList = new ArrayList<>();
+        Collection<Game> gameList = null;
         try
         {
             games.delete(1);
             gameList = games.getAllGames();
         } catch (Exception ex)
         {
-            System.out.println("failed to get game");
+            System.out.println("failed to delete game");
             System.out.println(ex.getMessage());
             return;
         }
@@ -209,10 +213,11 @@ setup();
     public void goodPostBlack()
     {
         setup();
-        try{
-            games.postBlack(1,"nick");
+        try
+        {
+            games.postBlack(1, "nick");
             Assertions.assertEquals("nick", games.get(1).getBlackUsername());
-        }catch (Exception ex)
+        } catch (Exception ex)
         {
             System.out.println("failed to post Black");
             System.out.println(ex.getMessage());
@@ -227,7 +232,7 @@ setup();
     {
         setup();
         Assertions.assertThrows(DataAccessException.class, () ->
-                games.postBlack(4,"nick"));
+                games.postBlack(4, "nick"));
     }
 
     @Test
@@ -235,12 +240,13 @@ setup();
     public void goodPostWhite()
     {
         setup();
-        try{
-            games.postBlack(1,"nick");
-            games.postWhite(1,"Sally");
+        try
+        {
+            games.postBlack(1, "nick");
+            games.postWhite(1, "Sally");
             Assertions.assertEquals("nick", games.get(1).getBlackUsername());
             Assertions.assertEquals("Sally", games.get(1).getWhiteUsername());
-        }catch (Exception ex)
+        } catch (Exception ex)
         {
             System.out.println("failed to post White");
             System.out.println(ex.getMessage());
@@ -254,7 +260,7 @@ setup();
     {
         setup();
         Assertions.assertThrows(DataAccessException.class, () ->
-                games.postWhite(4,"nick"));
+                games.postWhite(4, "nick"));
     }
 
     @Test
@@ -262,11 +268,12 @@ setup();
     public void goodPostObserver()
     {
         setup();
-        try{
-            games.postObserver(1,"nick");
+        try
+        {
+            games.postObserver(1, "nick");
             Assertions.assertNotEquals("nick", games.get(1).getBlackUsername());
             Assertions.assertNotEquals("nick", games.get(1).getWhiteUsername());
-        }catch (Exception ex)
+        } catch (Exception ex)
         {
             System.out.println("failed to post Observer");
             System.out.println(ex.getMessage());
@@ -280,24 +287,26 @@ setup();
     {
         setup();
         Assertions.assertThrows(DataAccessException.class, () ->
-                games.postObserver(4,"nick"));
+                games.postObserver(4, "nick"));
     }
 
     @Test
     @DisplayName("Good Clear")
     public void goodClear()
-    {setup();
-        Collection<Game> gameList = new ArrayList<>();
-        try{
+    {
+        setup();
+        Collection<Game> gameList = null;
+        try
+        {
             games.clear();
             gameList = games.getAllGames();
-        }catch (Exception ex)
+        } catch (Exception ex)
         {
             System.out.println("failed to Clear");
             System.out.println(ex.getMessage());
             return;
         }
-        Assertions.assertEquals(0,gameList.size());
+        Assertions.assertEquals(0, gameList.size());
     }
 
 

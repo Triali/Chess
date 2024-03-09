@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class AuthTokenSql implements AuthTokenDAO
 {
-    AuthTokenSql() throws DataAccessException{
+    public AuthTokenSql() throws DataAccessException{
         configureDatabase();
     }
 

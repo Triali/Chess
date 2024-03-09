@@ -19,6 +19,11 @@ public class AuthToken
         authToken = UUID.randomUUID().toString();
     }
 
+    public AuthToken(String username,String token)
+    {
+        this.username = username;
+        authToken = token;
+    }
     @Override
     public String toString()
     {

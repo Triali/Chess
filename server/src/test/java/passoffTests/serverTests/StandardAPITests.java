@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 
-import Server.*;
+import server.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

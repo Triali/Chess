@@ -23,14 +23,13 @@ public class ChessPiece
     private ChessPiece.PieceType type;
 
     // to check eligablitiy for castling
-    private boolean hasMoved;
 
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType pieceType)
     {
         color = pieceColor;
         type = pieceType;
-        hasMoved = false;
+//        hasMoved = false;
     }
 
     /**
@@ -252,13 +251,13 @@ public class ChessPiece
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChessPiece that = (ChessPiece) o;
-        return hasMoved == that.hasMoved && color == that.color && type == that.type;
+        return  color == that.color && type == that.type;
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(color, type, hasMoved);
+        return Objects.hash(color, type);
     }
 
     // checking the pawns potential moves:

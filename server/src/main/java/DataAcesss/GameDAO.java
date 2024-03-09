@@ -17,6 +17,6 @@ public interface GameDAO
     public void postBlack(int id,String username)throws DataAccessException;
     public void postWhite(int id,String username)throws DataAccessException;
     public void postObserver(int id, String username)throws DataAccessException;
-    public void clear();
-    public ArrayList<Game> getAllGames();
+    public void clear()throws DataAccessException;
+    public ArrayList<Game> getAllGames()throws DataAccessException;
 }

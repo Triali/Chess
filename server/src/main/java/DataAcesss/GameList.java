@@ -57,12 +57,12 @@ public class GameList implements GameDAO
         allGames.get(id);
     }
 
-    public void clear()
+    public void clear()throws DataAccessException
     {
         allGames.clear();
     }
 
-    public ArrayList<Game> getAllGames()
+    public ArrayList<Game> getAllGames() throws DataAccessException
     {
         ArrayList<Game> games = new ArrayList();
         for (int i = 1; i <= allGames.size(); i++)

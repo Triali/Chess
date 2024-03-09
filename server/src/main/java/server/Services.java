@@ -1,4 +1,4 @@
-package Server;
+package server;
 
 import DataAcesss.*;
 import dataAccess.DataAccessException;
@@ -70,9 +70,13 @@ public class Services
     }
     public void clearAll()
     {
+        try{
         users.clear();
         tokens.clear();
-        games.clear();
+        games.clear();}
+        catch (DataAccessException ex){
+            System.out.println("failed to clear");
+        }
     }
     public void joinGame(JoinGameRequest joinGame, String authToken) throws DataAccessException
     {

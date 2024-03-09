@@ -10,20 +10,20 @@ import java.util.*;
  */
 public class ChessGame
 {
-    private ChessBoard currentGame;
+    private ChessBoard board;
     private TeamColor currentTurn;
     private ChessPosition blackKing;
     private ChessPosition whiteKing;
 
     public ChessGame()
     {
-        currentGame = new ChessBoard();
+        board = new ChessBoard();
         currentTurn = TeamColor.WHITE;
     }
 
     public ChessGame(ChessBoard board, TeamColor currentTurn)
     {
-        currentGame = board;
+        this.board = board;
         this.currentTurn = currentTurn;
 
         findKings();
@@ -47,19 +47,19 @@ public class ChessGame
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChessGame chessGame = (ChessGame) o;
-        return Objects.equals(currentGame, chessGame.currentGame) && (currentTurn == chessGame.currentTurn);
+        return Objects.equals(board, chessGame.board) && (currentTurn == chessGame.currentTurn);
     }
 
     @Override
     public int hashCode()
     {
-        return Objects.hash(currentGame, currentTurn, blackKing, whiteKing);
+        return Objects.hash(board, currentTurn, blackKing, whiteKing);
     }
 
     @Override
     public String toString()
     {
-        return "ChessGame{" + "currentGame=" + currentGame + ", currentTurn=" + currentTurn + ", lastMove="+ '}';
+        return "ChessGame{" + "currentGame=" + board + ", currentTurn=" + currentTurn + ", lastMove="+ '}';
     }
 
     /**
@@ -92,13 +92,13 @@ public class ChessGame
 //        System.out.println("running validMoves");
         Collection<ChessMove> validMoves = new HashSet<>();
         Collection<ChessMove> possibleMoves = new HashSet<>();
-        ChessPiece piece = currentGame.getPiece(startPosition);
+        ChessPiece piece = board.getPiece(startPosition);
         if (piece == null)
         {
             return validMoves;
         }
 //        System.out.println(piece.pieceMoves(currentGame,startPosition));
-        possibleMoves.addAll(piece.pieceMoves(currentGame, startPosition));
+        possibleMoves.addAll(piece.pieceMoves(board, startPosition));
 //        System.out.println(possibleMoves);
         for (ChessMove move : possibleMoves)
         {
@@ -117,13 +117,13 @@ public class ChessGame
     private Collection<ChessMove> allValidMoves(TeamColor color)
     {
         Collection<ChessMove> allValidMoves = new HashSet<>();
-        Iterator<Map.Entry<ChessPosition, ChessPiece>> it = currentGame.getPieces().entrySet().iterator();
+        Iterator<Map.Entry<ChessPosition, ChessPiece>> it = board.getPieces().entrySet().iterator();
         for (int row = 8; row >= 1; row--)
         {
             for (int col = 1; col <= 8; col++)
             {
                 ChessPosition pos = new ChessPosition(row, col);
-                ChessPiece currPiece = currentGame.getPiece(pos);
+                ChessPiece currPiece = board.getPiece(pos);
                 if (currPiece != null && currPiece.getTeamColor() == color)
                 {
                     allValidMoves.addAll(validMoves(pos));
@@ -136,24 +136,24 @@ public class ChessGame
     private boolean tryMove(ChessMove move)
     {
 //        System.out.println("running tryMove");
-        ChessPiece pieceStart = currentGame.getPiece(move.getStartPosition());
-        ChessPiece pieceEnd = currentGame.getPiece(move.getEndPosition());
+        ChessPiece pieceStart = board.getPiece(move.getStartPosition());
+        ChessPiece pieceEnd = board.getPiece(move.getEndPosition());
         ChessGame.TeamColor color = pieceStart.getTeamColor();
         boolean isPossible = true;
 
-        currentGame.removePiece(move.getStartPosition());
-        currentGame.addPiece(move.getEndPosition(), pieceStart);
+        board.removePiece(move.getStartPosition());
+        board.addPiece(move.getEndPosition(), pieceStart);
 //        System.out.println(move);
         if (isInCheck(color))
         {
 
             isPossible = false;
         }
-        currentGame.removePiece(move.getEndPosition());
-        currentGame.addPiece(move.getStartPosition(), pieceStart);
+        board.removePiece(move.getEndPosition());
+        board.addPiece(move.getStartPosition(), pieceStart);
         if (pieceEnd != null)
         {
-            currentGame.addPiece(move.getEndPosition(), pieceEnd);
+            board.addPiece(move.getEndPosition(), pieceEnd);
         }
 //        System.out.println();
         return isPossible;
@@ -170,7 +170,7 @@ public class ChessGame
     {
         findKings();
         System.out.println("running makeMove");
-        ChessPiece piece = currentGame.getPiece(move.getStartPosition());
+        ChessPiece piece = board.getPiece(move.getStartPosition());
         // check if it is a valid move
         Collection<ChessMove> moves = validMoves(move.getStartPosition());
         System.out.println(move);
@@ -189,9 +189,9 @@ public class ChessGame
         if (moves.contains(move) && (piece != null))
         {
             System.out.println("good move");
-            currentGame.removePiece(move.getStartPosition());
+            board.removePiece(move.getStartPosition());
 //            System.out.println("After Remove \n"+currentGame);
-            currentGame.addPiece(move.getEndPosition(), piece);
+            board.addPiece(move.getEndPosition(), piece);
             changeTeamTurn();
 
             if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == TeamColor.BLACK)
@@ -215,7 +215,7 @@ public class ChessGame
 
     public void findKings()
     {
-        for (Map.Entry<ChessPosition, ChessPiece> entry : currentGame.getPieces().entrySet())
+        for (Map.Entry<ChessPosition, ChessPiece> entry : board.getPieces().entrySet())
         {
             if (entry.getValue() == null)
             {
@@ -298,7 +298,7 @@ public class ChessGame
      */
     public void setBoard(ChessBoard board)
     {
-        currentGame = board;
+        this.board = board;
     }
 
     /**
@@ -308,7 +308,7 @@ public class ChessGame
      */
     public ChessBoard getBoard()
     {
-        return currentGame;
+        return board;
     }
 
     /**
@@ -324,12 +324,12 @@ public class ChessGame
         ChessPosition pos = startPos;
         try
         {
-            TeamColor color = currentGame.getPiece(startPos).getTeamColor();
+            TeamColor color = board.getPiece(startPos).getTeamColor();
             pos = pos.addPosition(vector);
             int count = 0;
             while (pos.getColumn() <= 8 && pos.getColumn() >= 1 && pos.getRow() <= 8 && pos.getRow() >= 1 && count < spaces)
             {
-                ChessPiece currPiece = currentGame.getPiece(pos);
+                ChessPiece currPiece = board.getPiece(pos);
                 if (currPiece != null)
                 {
                     // same color
@@ -439,7 +439,7 @@ public class ChessGame
 //        System.out.println("running CheckPawns");
         try
         {
-            TeamColor color = currentGame.getPiece(startPos).getTeamColor();
+            TeamColor color = board.getPiece(startPos).getTeamColor();
             int row = (color == TeamColor.WHITE) ? (1) : (-1);
             int col = 1;
             int[] array = new int[]{row, col};
@@ -450,8 +450,8 @@ public class ChessGame
             ChessPosition left = startPos.addPosition(new int[]{row, col});
             ChessPosition right = startPos.addPosition(new int[]{row, -col});
 
-            ChessPiece rightPiece = currentGame.getPiece(right);
-            ChessPiece leftPiece = currentGame.getPiece(left);
+            ChessPiece rightPiece = board.getPiece(right);
+            ChessPiece leftPiece = board.getPiece(left);
             System.out.println("pawn Right " + right + " " + rightPiece);
             System.out.println("pawn Left " + left + " " + leftPiece);
 

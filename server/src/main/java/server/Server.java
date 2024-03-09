@@ -1,11 +1,7 @@
-package Server;
+package server;
 
 
-import dataAccess.DataAccessException;
-import model.User;
 import spark.*;
-import com.google.gson.Gson;
-import Server.Handlers;
 
 public class Server {
 

@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Game
 {
-    private int ID = -1;
+    private int id = -1;
     private String blackUsername = null;
     private String whiteUsername =null;
     private String gameName = null;
@@ -52,12 +52,12 @@ public class Game
 
     public int getID()
     {
-        return ID;
+        return id;
     }
 
-    public void setID(int ID)
+    public void setID(int id)
     {
-        this.ID = ID;
+        this.id = id;
     }
 
     @Override
@@ -67,13 +67,28 @@ public class Game
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Game game1 = (Game) o;
-        return Objects.equals(ID, game1.ID);
+        return Objects.equals(id, game1.id);
     }
 
     @Override
     public String toString()
     {
-        return "Game{"+ gameName +", "+ ID+'}';
+        return "Game{"+ gameName +", "+ id+'}';
+    }
+
+    public void setGameName(String gameName)
+    {
+        this.gameName = gameName;
+    }
+
+    public ChessGame getGame()
+    {
+        return game;
+    }
+
+    public void setGame(ChessGame game)
+    {
+        this.game = game;
     }
 
     @Override

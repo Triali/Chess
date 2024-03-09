@@ -1,5 +1,7 @@
 package model;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.util.Objects;
 
 public class User
@@ -38,6 +40,11 @@ public class User
     public String getUsername()
     {
         return username;
+    }
+
+    public void setPassword(String password)
+    {
+        this.password = password;
     }
 
     @Override

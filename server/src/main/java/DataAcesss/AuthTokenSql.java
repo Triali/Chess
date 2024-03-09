@@ -9,7 +9,8 @@ import java.sql.SQLException;
 
 public class AuthTokenSql implements AuthTokenDAO
 {
-    public AuthTokenSql() throws DataAccessException{
+    public AuthTokenSql() throws DataAccessException
+    {
         configureDatabase();
     }
 
@@ -33,14 +34,14 @@ public class AuthTokenSql implements AuthTokenDAO
         {
             throw new DataAccessException("Error: bad request");
         }
-                throw new DataAccessException("Error: bad request");
-
+        throw new DataAccessException("Error: bad request");
     }
+
     private AuthToken readToken(ResultSet rs) throws SQLException
     {
         String token = rs.getString("authToken");
         String username = rs.getString("username");
-        return new AuthToken(username,token);
+        return new AuthToken(username, token);
     }
 
     public void insert(AuthToken token) throws DataAccessException
@@ -59,22 +60,27 @@ public class AuthTokenSql implements AuthTokenDAO
             throw new DataAccessException(ex.getMessage());
         }
     }
-    private boolean isInDataBase(String token){
-        try{
-            if(get(token) == null)
+
+    private boolean isInDataBase(String token)
+    {
+        try
+        {
+            if (get(token) == null)
             {
                 return false;
             }
             return true;
-        }catch (Exception ex){
+        } catch (Exception ex)
+        {
             return false;
         }
     }
 
     public void delete(String authToken) throws DataAccessException
     {
-        if(!isInDataBase(authToken)){
-            throw  new DataAccessException("Error: bad request");
+        if (!isInDataBase(authToken))
+        {
+            throw new DataAccessException("Error: bad request");
         }
         try (var conn = DatabaseManager.getConnection())
         {

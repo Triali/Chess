@@ -14,7 +14,7 @@ public interface UserDAO
 
     public void delete(String userName) throws DataAccessException;
 
-    public void clear();
+    public void clear()throws DataAccessException;
 
 
 

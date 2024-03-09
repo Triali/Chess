@@ -5,6 +5,7 @@ import dataAccess.DataAccessException;
 import model.AuthToken;
 import model.Game;
 import model.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import records.*;
 
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ public class Services
     UserDAO users = new UserList();
     GameDAO games = new GameList();
     AuthTokenDAO tokens = new AuthTokenList();
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
 
     //helpers
     public AuthToken createAuthToken(String username) throws DataAccessException
@@ -39,7 +42,7 @@ public class Services
     {
         User user= users.get(login.username());
         String password = user.getPassword();
-        if (!password.equals(login.password()))
+        if (!encoder.matches(login.password(),password))
         {
             throw new IllegalArgumentException("Error: unauthorized");// TODO fix Error message
         }
@@ -59,6 +62,8 @@ public class Services
                 throw new DataAccessException("Error: bad request");//TODO fix error message
             } else
             {
+                String HashedPasword = encoder.encode(login.getPassword());
+                login.setPassword(HashedPasword);
                 users.insert(login);
                 AuthToken token = createAuthToken(login.getUsername());
                 return new LoginResponce(token.getUsername(), token.getAuthToken());

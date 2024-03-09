@@ -4,7 +4,7 @@ import DataAcesss.AuthTokenDAO;
 import DataAcesss.AuthTokenSql;
 import DataAcesss.GameSql;
 import dataAccess.DataAccessException;
-import model.*;
+import model.AuthToken;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
@@ -154,7 +154,6 @@ public class TestAuthTokenDAO
     public void BadDelete()
     {
         setup();
-        Collection<Game> gameList = new ArrayList<>();
 
         Assertions.assertThrows(DataAccessException.class, () ->
                 tokens.delete("rtyukmnbhgjkm"));

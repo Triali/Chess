@@ -51,8 +51,8 @@ public class GameSql implements GameDAO
     private Game readGame(ResultSet rs) throws SQLException
     {
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(ChessPosition.class,new JsonTypeAdapterSerilazer());
-        gsonBuilder.registerTypeAdapter(ChessPosition.class,new JsonTypeAdapterDeserializer());
+        gsonBuilder.registerTypeAdapter(ChessPosition.class, new JsonTypeAdapterSerilazer());
+        gsonBuilder.registerTypeAdapter(ChessPosition.class, new JsonTypeAdapterDeserializer());
 
         Gson gson = gsonBuilder.create();
 
@@ -70,9 +70,10 @@ public class GameSql implements GameDAO
         return game;
     }
 
-    public void insert(Game game) throws DataAccessException
+    public int insert(Game game) throws DataAccessException
     {
-        if(isInDataBase(game.getID()))
+        int id = 0;
+        if (isInDataBase(game.getID()))
         {
             throw new DataAccessException("Error: bad request(is in game)");
         }
@@ -83,10 +84,10 @@ public class GameSql implements GameDAO
                 preparedStatement.setString(1, game.getGameName());
                 preparedStatement.setString(2, game.getBlackUsername());
                 preparedStatement.setString(3, game.getWhiteUsername());
-                ChessGame chessGame  = game.getGame();
+                ChessGame chessGame = game.getGame();
                 GsonBuilder gsonBuilder = new GsonBuilder();
-                gsonBuilder.registerTypeAdapter(ChessPosition.class,new JsonTypeAdapterSerilazer());
-                gsonBuilder.registerTypeAdapter(ChessPosition.class,new JsonTypeAdapterDeserializer());
+                gsonBuilder.registerTypeAdapter(ChessPosition.class, new JsonTypeAdapterSerilazer());
+                gsonBuilder.registerTypeAdapter(ChessPosition.class, new JsonTypeAdapterDeserializer());
 
                 Gson gson = gsonBuilder.create();
 
@@ -100,26 +101,30 @@ public class GameSql implements GameDAO
                 preparedStatement.executeUpdate();
 
                 var resultSet = preparedStatement.getGeneratedKeys();
-                var ID = 0;
+
                 if (resultSet.next())
                 {
-                    ID = resultSet.getInt(1);
+                    id = resultSet.getInt(1);
                 }
             }
         } catch (SQLException ex)
         {
             throw new DataAccessException(ex.getMessage());
         }
-
+        return id;
     }
-    private boolean isInDataBase(int id){
-        try{
-            if(get(id) == null)
+
+    private boolean isInDataBase(int id)
+    {
+        try
+        {
+            if (get(id) == null)
             {
                 return false;
             }
             return true;
-        }catch (Exception ex){
+        } catch (Exception ex)
+        {
             return false;
         }
     }
@@ -127,14 +132,16 @@ public class GameSql implements GameDAO
 
     public void delete(int id) throws DataAccessException
     {
-        if(!isInDataBase(id)){
-            throw  new DataAccessException("Error: bad request");
+        if (!isInDataBase(id))
+        {
+            throw new DataAccessException("Error: unauthorized");
         }
         int size;
         try
         {
             size = getAllGames().size();
-        }catch (DataAccessException ex){
+        } catch (DataAccessException ex)
+        {
             return;
         }
         try (var conn = DatabaseManager.getConnection())
@@ -146,16 +153,18 @@ public class GameSql implements GameDAO
             }
         } catch (SQLException ex)
         {
-            throw new DataAccessException("Error: bad request");
+            throw new DataAccessException("Error: unauthorized");
         }
         int sizeEnd;
         try
         {
             sizeEnd = getAllGames().size();
-        }catch (DataAccessException ex){
+        } catch (DataAccessException ex)
+        {
             return;
         }
-        if(sizeEnd != size-1){
+        if (sizeEnd != size - 1)
+        {
             throw new DataAccessException("Error: bad request");
         }
 
@@ -163,8 +172,9 @@ public class GameSql implements GameDAO
 
     public void postBlack(int id, String username) throws DataAccessException
     {
-        if(!isInDataBase(id)){
-            throw  new DataAccessException("Error: bad request");
+        if (!isInDataBase(id))
+        {
+            throw new DataAccessException("Error: unauthorized");
         }
         try (var conn = DatabaseManager.getConnection())
         {
@@ -176,14 +186,15 @@ public class GameSql implements GameDAO
             }
         } catch (SQLException ex)
         {
-            throw new DataAccessException("Error: bad request");
+            throw new DataAccessException("Error: unauthorized");
         }
     }
 
     public void postWhite(int id, String username) throws DataAccessException
     {
-        if(!isInDataBase(id)){
-            throw  new DataAccessException("Error: bad request");
+        if (!isInDataBase(id))
+        {
+            throw new DataAccessException("Error: unauthorized");
         }
         try (var conn = DatabaseManager.getConnection())
         {
@@ -195,14 +206,15 @@ public class GameSql implements GameDAO
             }
         } catch (SQLException ex)
         {
-            throw new DataAccessException("Error: bad request");
+            throw new DataAccessException("Error: unauthorized");
         }
     }
 
     public void postObserver(int id, String username) throws DataAccessException
     {
-        if(!isInDataBase(id)){
-            throw  new DataAccessException("Error: bad request");
+        if (!isInDataBase(id))
+        {
+            throw new DataAccessException("Error: unauthorized");
         }
         try (var conn = DatabaseManager.getConnection())
         {
@@ -212,7 +224,7 @@ public class GameSql implements GameDAO
             }
         } catch (SQLException ex)
         {
-            throw new DataAccessException("Error: bad request");
+            throw new DataAccessException("Error: unauthorized");
         }
     }
 

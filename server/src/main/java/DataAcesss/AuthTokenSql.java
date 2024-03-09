@@ -32,9 +32,9 @@ public class AuthTokenSql implements AuthTokenDAO
             }
         } catch (Exception e)
         {
-            throw new DataAccessException("Error: bad request");
+            throw new DataAccessException("Error: unauthorized");
         }
-        throw new DataAccessException("Error: bad request");
+        throw new DataAccessException("Error: unauthorized");
     }
 
     private AuthToken readToken(ResultSet rs) throws SQLException
@@ -57,7 +57,7 @@ public class AuthTokenSql implements AuthTokenDAO
             }
         } catch (SQLException ex)
         {
-            throw new DataAccessException(ex.getMessage());
+            throw new DataAccessException("Error: unauthorized");
         }
     }
 
@@ -80,7 +80,7 @@ public class AuthTokenSql implements AuthTokenDAO
     {
         if (!isInDataBase(authToken))
         {
-            throw new DataAccessException("Error: bad request");
+            throw new DataAccessException("Error: unauthorized");
         }
         try (var conn = DatabaseManager.getConnection())
         {
@@ -91,7 +91,7 @@ public class AuthTokenSql implements AuthTokenDAO
             }
         } catch (SQLException ex)
         {
-            throw new DataAccessException("Error: bad request");
+            throw new DataAccessException("Error: unauthorized");
         }
     }
 

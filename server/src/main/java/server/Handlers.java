@@ -11,7 +11,13 @@ public class Handlers
 Services services;
 
 public Handlers(){
-    services = new Services();
+    try
+    {
+        services = new Services();
+    }
+    catch(Exception ex){
+        System.out.println("failed to set up");
+    }
 }
 
     public Object clearAll(Request req, Response res)

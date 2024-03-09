@@ -20,7 +20,7 @@ public class GameList implements GameDAO
         throw new DataAccessException("Error: unauthorized");
     }
 
-    public void insert(Game game) throws DataAccessException
+    public int insert(Game game) throws DataAccessException
     {
         if (game.getID() == -1)
         {
@@ -35,6 +35,7 @@ public class GameList implements GameDAO
         {
             allGames.put(id, game);
         }
+        return id;
     }
 
     public void delete(int id) throws DataAccessException

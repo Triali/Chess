@@ -34,9 +34,9 @@ public class UserSql implements UserDAO
             }
         } catch (Exception e)
         {
-            throw new DataAccessException(e.getMessage());
+            throw new DataAccessException("Error: unauthorized");
         }
-        throw new DataAccessException("Error: bad request2");
+        throw new DataAccessException("Error: unauthorized");
     }
     private User readUser(ResultSet rs) throws SQLException
     {

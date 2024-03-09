@@ -12,12 +12,16 @@ import java.util.ArrayList;
 
 public class Services
 {
-    UserDAO users = new UserList();
-    GameDAO games = new GameList();
-    AuthTokenDAO tokens = new AuthTokenList();
+    UserDAO users;
+    GameDAO games;
+    AuthTokenDAO tokens;
     BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-
+public Services() throws DataAccessException{
+    users = new UserSql();
+    games = new GameSql();
+    tokens = new AuthTokenSql();
+}
     //helpers
     public AuthToken createAuthToken(String username) throws DataAccessException
     {
@@ -114,7 +118,7 @@ public class Services
                 return;
             }
         }
-        throw new DataAccessException("Error: already taken");// TODO fix error message
+        throw new DataAccessException("Error: already taken");
     }
     public AllGamesReturn listGames(String authToken) throws DataAccessException
     {
@@ -130,7 +134,7 @@ public class Services
     {
         tokens.get(authToken);
         Game game = new Game(name);
-        games.insert(game);
-        return new GameReturn(game.getID(), game.getWhiteUsername(), game.getBlackUsername(), game.getGameName());
+        int id = games.insert(game);
+        return new GameReturn(id, game.getWhiteUsername(), game.getBlackUsername(), game.getGameName());
     }
 }

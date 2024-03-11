@@ -1,14 +1,10 @@
-package serviceTests;
+package dataAccessTests;
 
 import DataAcesss.AuthTokenDAO;
 import DataAcesss.AuthTokenSql;
-import DataAcesss.GameSql;
 import dataAccess.DataAccessException;
 import model.AuthToken;
 import org.junit.jupiter.api.*;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class TestAuthTokenDAO
 {

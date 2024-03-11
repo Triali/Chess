@@ -1,4 +1,4 @@
-package serviceTests;
+package dataAccessTests;
 
 import DataAcesss.GameDAO;
 import DataAcesss.GameSql;

@@ -120,7 +120,7 @@ public class PrintBoard {
     private void printPiece(int row, int col){
         ChessPiece piece = game.getBoard().getPiece(new ChessPosition(row, col));
         if(piece ==null){
-            out.print("\u2002\u2009"+'*'+"\u2002\u2009");
+            out.print(EMPTY);
         }else {
             out.print("\u2002"+piece+"\u2002");
         }

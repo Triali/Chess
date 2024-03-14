@@ -114,7 +114,7 @@ public class PrintBoard {
 
     }
     private void printEndline(){
-        out.print(SET_BG_COLOR_BLACK);
+        out.print("\u001b[48;5;235m");
         out.print("\n");
     }
     private void printPiece(int row, int col){

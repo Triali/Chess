@@ -3,11 +3,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.OutputStream;
+import java.util.Scanner;
 
 public class Communicator
 {
 
-    public void doGet(String urlString) throws IOException
+    public String doGet(String urlString,String token) throws IOException
     {
         URL url = new URL(urlString);
 
@@ -17,13 +18,14 @@ public class Communicator
         connection.setRequestMethod("GET");
 
         // Set HTTP request headers, if necessary
-        // connection.addRequestProperty("Accept", "text/html");
-        // connection.addRequestProperty("Authorization", "fjaklc8sdfjklakl");
+         connection.addRequestProperty("Accept", "text/html");
+         connection.addRequestProperty("authorization",token);
 
         connection.connect();
 
-        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK)
+        if (isSuccessful(connection.getResponseCode()))
         {
+
             // Get HTTP response headers, if necessary
             // Map<String, List<String>> headers = connection.getHeaderFields();
 
@@ -32,17 +34,19 @@ public class Communicator
             //connection.getHeaderField("Content-Length");
 
             InputStream responseBody = connection.getInputStream();
+            return inputStreamtoString(responseBody);
             // Read and process response body from InputStream ...
         } else
         {
             // SERVER RETURNED AN HTTP ERROR
 
             InputStream responseBody = connection.getErrorStream();
+            return inputStreamtoString(responseBody);
             // Read and process error response body from InputStream ...
         }
     }
 
-    public void doPost(String urlString) throws IOException
+    public String doPost(String urlString,String req,String token) throws IOException
     {
         URL url = new URL(urlString);
 
@@ -50,19 +54,25 @@ public class Communicator
 
         connection.setReadTimeout(5000);
         connection.setRequestMethod("POST");
+        connection.addRequestProperty("Content-Type","application/json");
         connection.setDoOutput(true);
 
         // Set HTTP request headers, if necessary
-        // connection.addRequestProperty("Accept", "text/html");
-
-        connection.connect();
-
-        try (OutputStream requestBody = connection.getOutputStream();)
-        {
-            // Write request body to OutputStream ...
+         connection.addRequestProperty("Accept", "text/html");
+        if(token !=null){
+            connection.addRequestProperty("authorization", token);
         }
 
-        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK)
+
+        if (req != null)
+        {
+            try (OutputStream requestBody = connection.getOutputStream();)
+            {
+                requestBody.write(req.getBytes());
+            }
+        }
+        connection.connect();
+        if (isSuccessful(connection.getResponseCode()))
         {
             // Get HTTP response headers, if necessary
             // Map<String, List<String>> headers = connection.getHeaderFields();
@@ -72,17 +82,19 @@ public class Communicator
             //connection.getHeaderField("Content-Length");
 
             InputStream responseBody = connection.getInputStream();
+            return inputStreamtoString(responseBody);
             // Read response body from InputStream ...
         } else
         {
             // SERVER RETURNED AN HTTP ERROR
 
             InputStream responseBody = connection.getErrorStream();
+            return inputStreamtoString(responseBody);
             // Read and process error response body from InputStream ...
         }
     }
 
-    public void doDelete(String urlString) throws IOException
+    public String doDelete(String urlString,String token) throws IOException
     {
         URL url = new URL(urlString);
 
@@ -91,17 +103,95 @@ public class Communicator
         connection.setReadTimeout(5000);
 
         connection.setRequestMethod("DELETE");
+
+        if(token !=null){
+            connection.addRequestProperty("authorization", token);
+        }
+
+        connection.connect();
+
+        if (isSuccessful(connection.getResponseCode()))
+        {
+            // Get HTTP response headers, if necessary
+            // Map<String, List<String>> headers = connection.getHeaderFields();
+
+            // OR
+
+            //connection.getHeaderField("Content-Length");
+
+            InputStream responseBody = connection.getInputStream();
+            return inputStreamtoString(responseBody);
+            // Read response body from InputStream ...
+        } else
+        {
+            // SERVER RETURNED AN HTTP ERROR
+
+            InputStream responseBody = connection.getErrorStream();
+            return inputStreamtoString(responseBody);
+            // Read and process error response body from InputStream ...
+        }
     }
 
-    public void doInsert(String urlString) throws IOException
+    public String doPut(String urlString,String req,String token) throws IOException
     {
         URL url = new URL(urlString);
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         connection.setReadTimeout(5000);
+        connection.setRequestMethod("PUT");
+        connection.addRequestProperty("Content-Type","application/json");
+        connection.setDoOutput(true);
 
-        connection.setRequestMethod("INSERT");
+        // Set HTTP request headers, if necessary
+        connection.addRequestProperty("Accept", "text/html");
+        if(token !=null){
+            connection.addRequestProperty("authorization", token);
+        }
+
+
+        if (req != null)
+        {
+            try (OutputStream requestBody = connection.getOutputStream();)
+            {
+                requestBody.write(req.getBytes());
+            }
+        }
+        connection.connect();
+        if (isSuccessful(connection.getResponseCode()))
+        {
+            // Get HTTP response headers, if necessary
+            // Map<String, List<String>> headers = connection.getHeaderFields();
+
+            // OR
+
+            //connection.getHeaderField("Content-Length");
+
+            InputStream responseBody = connection.getInputStream();
+            return inputStreamtoString(responseBody);
+            // Read response body from InputStream ...
+        } else
+        {
+            // SERVER RETURNED AN HTTP ERROR
+
+            InputStream responseBody = connection.getErrorStream();
+            return inputStreamtoString(responseBody);
+            // Read and process error response body from InputStream ...
+        }
+    }
+
+    private String inputStreamtoString(InputStream is){
+        Scanner sc = new Scanner(is);
+        StringBuffer sb = new StringBuffer();
+        //Appending each line to the buffer
+        while(sc.hasNext()) {
+            sb.append(" "+sc.nextLine());
+        }
+        return sb.toString();
+    }
+
+    private boolean isSuccessful(int status) {
+        return status / 100 == 2;
     }
 
 }

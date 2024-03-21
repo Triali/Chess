@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Client
 {
+    private String token;
 
     public static void main(String[] args) {
         var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
@@ -48,7 +49,7 @@ public class Client
         Scanner in = new Scanner(System.in);
         int a = in.nextInt();
         switch(a){
-            case 1:
+            case 1://Logout
                 break;
             case 2:
                 break;

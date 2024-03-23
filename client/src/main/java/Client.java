@@ -29,16 +29,17 @@ public class Client
         server = new ServerFacade();
         this.out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         int option = 0;
-        while(token != null || option !=3)
+        while (token != null || option != 3)
         {
-           if(token == null){
-               listLoginOption();
-               option = getLoginOption(server);
-           }
-           else {
-               listUserOption();
-               option = getUserOption(server);
-           }
+            if (token == null)
+            {
+                listLoginOption();
+                option = getLoginOption(server);
+            } else
+            {
+                listUserOption();
+                option = getUserOption(server);
+            }
         }
 
     }
@@ -63,9 +64,10 @@ public class Client
 
         try
         {
-             a= in.nextInt();
-        }catch (Exception ex){
-            a=4;
+            a = in.nextInt();
+        } catch (Exception ex)
+        {
+            a = 4;
         }
         String restOfLine = in.nextLine();
 
@@ -132,7 +134,14 @@ public class Client
     public int getUserOption(ServerFacade sf)
     {
         Scanner in = new Scanner(System.in);
-        int a = in.nextInt();
+        int a;
+        try
+        {
+            a = in.nextInt();
+        } catch (Exception ex)
+        {
+            a = 6;
+        }
         switch (a)
         {
             case 1://Logout
@@ -203,12 +212,20 @@ public class Client
         {
             games = sf.listGames(token).games();
         } catch (IOException ex)
-            {
-                System.out.println("Failed to get games");
-            }
+        {
+            System.out.println("Failed to get games");
+        }
         System.out.println("Enter Game Number:");
         int gameNum = in.nextInt();
-        int gameID = games.get(gameNum - 1).gameID();
+        int gameID;
+        try
+        {
+            gameID = games.get(gameNum - 1).gameID();
+        } catch (Exception ex)
+        {
+            System.out.println("failed to join game");
+            return;
+        }
         System.out.println(games.get(gameNum - 1).gameName());
         System.out.println("    White: " + games.get(gameNum - 1).whiteUsername());
         System.out.println("    Black: " + games.get(gameNum - 1).blackUsername());
@@ -247,9 +264,24 @@ public class Client
     private void joinGameObserver(ServerFacade sf)
     {
         Scanner in = new Scanner(System.in);
+        try
+        {
+            games = sf.listGames(token).games();
+        } catch (IOException ex)
+        {
+            System.out.println("Failed to get games");
+        }
         System.out.println("Enter Game Number:");
         int gameNum = in.nextInt();
-        int gameID = games.get(gameNum - 1).gameID();
+        int gameID;
+        try
+        {
+            gameID = games.get(gameNum - 1).gameID();
+        } catch (Exception ex)
+        {
+            System.out.println("failed to join game");
+            return;
+        }
         try
         {
             sf.joinGame(new JoinGameRequest(null, gameID), token);
@@ -284,16 +316,18 @@ public class Client
         }
     }
 
-    private void createGame(ServerFacade sf){
+    private void createGame(ServerFacade sf)
+    {
         Scanner in = new Scanner(System.in);
         System.out.println("Enter Game Name:");
         String gameName = in.nextLine();
         CreateGameRequest game = new CreateGameRequest(gameName);
         try
         {
-            sf.createGame(game,token);
+            sf.createGame(game, token);
             System.out.println("created Game");
-        }catch(IOException ex){
+        } catch (IOException ex)
+        {
             System.out.println("Failed to create Game");
         }
     }

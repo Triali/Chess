@@ -1,7 +1,6 @@
 package model;
 
 import java.util.Objects;
-import org.springframework.security.crypto.bcrypt.*;
 
 public class User
 {

@@ -92,8 +92,8 @@ public class GameSql implements GameDAO
                 Gson gson = gsonBuilder.create();
 
                 String json = gson.toJson(chessGame);
-                System.out.println("To Json");
-                System.out.println(json);
+//                System.out.println("To Json");
+//                System.out.println(json);
 
                 preparedStatement.setString(4, json);
 

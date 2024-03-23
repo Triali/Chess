@@ -110,7 +110,6 @@ public class TestAuthTokenDAO
         }
         Assertions.assertEquals(token4, testToken);
     }
-
     @Test
     @DisplayName("Bad Insert")
     public void badInsert()

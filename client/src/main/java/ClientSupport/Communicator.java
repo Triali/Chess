@@ -1,3 +1,5 @@
+package ClientSupport;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -59,18 +61,19 @@ public class Communicator
 
         // Set HTTP request headers, if necessary
          connection.addRequestProperty("Accept", "text/html");
+
         if(token !=null){
             connection.addRequestProperty("authorization", token);
         }
 
-
         if (req != null)
         {
-            try (OutputStream requestBody = connection.getOutputStream();)
+            try (OutputStream requestBody = connection.getOutputStream())
             {
                 requestBody.write(req.getBytes());
             }
         }
+
         connection.connect();
         if (isSuccessful(connection.getResponseCode()))
         {

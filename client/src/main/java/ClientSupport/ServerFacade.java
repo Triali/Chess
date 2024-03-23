@@ -1,3 +1,6 @@
+package ClientSupport;
+
+import ClientSupport.Communicator;
 import com.google.gson.Gson;
 import model.User;
 import records.*;
@@ -7,7 +10,7 @@ import java.io.IOException;
 
 public class ServerFacade
 {
-    private String urlString = "https://localhost:8080";
+    private String urlString = "http://localhost:8080";
     private Communicator coms = new Communicator();
 
     public LoginResponce register(User newUser) throws IOException

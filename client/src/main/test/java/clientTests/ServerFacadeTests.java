@@ -7,6 +7,7 @@ import model.Game;
 import model.User;
 import org.junit.jupiter.api.*;
 import org.springframework.security.crypto.bcrypt.*;
+import records.CreateGameRequest;
 import records.LoginRequest;
 import server.Server;
 import ClientSupport.*;
@@ -158,9 +159,11 @@ public class ServerFacadeTests {
     @DisplayName("Good Login")
     public void loginGood() {
         setup();
+
         String testAuth = null;
         String testName = null;
         try{
+            tokens.clear();
             LoginRequest logReq = new LoginRequest("user1","pass1");
             testAuth = serverFacade.login(logReq).authToken();
         }catch (Exception ex){
@@ -181,42 +184,57 @@ public class ServerFacadeTests {
         setup();
         Assertions.assertThrows(Exception.class, () -> serverFacade.login(new LoginRequest("user1","pass2")));
     }
-//
-//    @Test
-//    public void logoutGood() {
-//        setup();
-//        Assertions.assertTrue(true);
-//    }
-//
-//    @Test
-//    public void logoutBad() {
-//        setup();
-//        Assertions.assertTrue(true);
-//    }
-//
-//    @Test
-//    public void createGameGood() {
-//        setup();
-//        Assertions.assertTrue(true);
-//    }
-//
-//    @Test
-//    public void createGameBad() {
-//        setup();
-//        Assertions.assertTrue(true);
-//    }
-//
-//    @Test
-//    public void joinGameGood() {
-//        setup();
-//        Assertions.assertTrue(true);
-//    }
-//
-//    @Test
-//    public void joinGameBad() {
-//        setup();
-//        Assertions.assertTrue(true);
-//    }
+
+    @Test
+    public void logoutGood() {
+        setup();
+        try{
+            serverFacade.logout(auth1);
+        }catch (Exception ex){
+            System.out.println("failed to Login");
+        }
+        Assertions.assertThrows(Exception.class, () -> tokens.get(auth1));
+    }
+
+    @Test
+    public void logoutBad() {
+        setup();
+
+
+
+        Assertions.assertThrows(Exception.class, () -> serverFacade.logout("qwertyuiop"));
+    }
+
+    @Test
+    public void createGameGood() {
+        setup();
+        CreateGameRequest testGame = new CreateGameRequest("TestGame");
+        try{
+            serverFacade.createGame(testGame, auth1);
+        }catch(Exception ex){
+            System.out.println("failed to create game");
+        }
+    }
+
+    @Test
+    public void createGameBad() {
+        setup();
+        CreateGameRequest testGame = new CreateGameRequest("TestGame");
+        Assertions.assertThrows(Exception.class, () -> serverFacade.createGame(testGame,  "qwertyuiop"));
+
+    }
+
+    @Test
+    public void joinGameGood() {
+        setup();
+        Assertions.assertTrue(true);
+    }
+
+    @Test
+    public void joinGameBad() {
+        setup();
+        Assertions.assertTrue(true);
+    }
 //
 //    @Test
 //    public void listGamesGood() {

@@ -2,6 +2,7 @@ package ClientSupport;
 
 import ClientSupport.Communicator;
 import com.google.gson.Gson;
+import model.Game;
 import model.User;
 import records.*;
 
@@ -47,25 +48,41 @@ public class ServerFacade
     public void logout(String token) throws IOException
     {
         String json = coms.doDelete(urlString + "/session", token);
+        if(!json.equals(""))
+        {
+            throw new IOException(json);
+        }
     }
 
     public AllGamesReturn listGames(String token) throws IOException
     {
         String json = coms.doGet(urlString + "/game", token);
-        return new Gson().fromJson(json, AllGamesReturn.class);
+        AllGamesReturn allGames =  new Gson().fromJson(json, AllGamesReturn.class);
+        if(allGames.games() == null){
+            throw new IOException(json);
+        }
+        return allGames;
     }
 
     public void joinGame(JoinGameRequest joinReq, String token) throws IOException
     {
 
-        String json = new Gson().toJson(joinReq);
-        coms.doPut(urlString + "/game", json, token);
+        String join = new Gson().toJson(joinReq);
+        String json = coms.doPut(urlString + "/game", join, token);
+        if(!json.equals(""))
+        {
+            throw new IOException(json);
+        }
     }
 
     public GameReturn createGame(CreateGameRequest newGame, String token) throws IOException
     {
-        String json = new Gson().toJson(newGame);
-        coms.doPost(urlString + "/game", json, token);
+        String gameRer = new Gson().toJson(newGame);
+        String json =coms.doPost(urlString + "/game", gameRer, token);
+        GameReturn game = new Gson().fromJson(json, GameReturn.class);
+        if(game.gameName()==null){
+            throw new IOException(json);
+        }
         return new Gson().fromJson(json, GameReturn.class);
     }
 }

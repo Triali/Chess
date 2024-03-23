@@ -69,7 +69,7 @@ public class ServerFacade
 
         String join = new Gson().toJson(joinReq);
         String json = coms.doPut(urlString + "/game", join, token);
-        if(!json.equals(""))
+        if(json.contains("Message"))
         {
             throw new IOException(json);
         }
@@ -80,7 +80,7 @@ public class ServerFacade
         String gameRer = new Gson().toJson(newGame);
         String json =coms.doPost(urlString + "/game", gameRer, token);
         GameReturn game = new Gson().fromJson(json, GameReturn.class);
-        if(game.gameName()==null){
+        if(game.gameID()==0){
             throw new IOException(json);
         }
         return new Gson().fromJson(json, GameReturn.class);

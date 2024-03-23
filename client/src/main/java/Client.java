@@ -8,31 +8,50 @@ import records.LoginRequest;
 import ui.PrintBoard;
 
 import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static ui.EscapeSequences.SET_TEXT_COLOR_BLACK;
+import static ui.EscapeSequences.SET_TEXT_COLOR_WHITE;
+
 public class Client
 {
-    private String token;
+    private String token = null;
     private ServerFacade server;
+    PrintStream out;
 
     ArrayList<GameReturn> games;
 
-    public static void main(String[] args)
+    public void start()
     {
-        var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
-        System.out.println("♕ 240 Chess Client: " + piece);
-        ChessGame game = new ChessGame();
+        server = new ServerFacade();
+        this.out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
+        int option = 0;
+        while(token != null || option !=3)
+        {
+           if(token == null){
+               listLoginOption();
+               option = getLoginOption(server);
+           }
+           else {
+               listUserOption();
+               option = getUserOption(server);
+           }
+        }
 
     }
 
     private void listLoginOption()
     {
+        out.print(SET_TEXT_COLOR_WHITE);
         System.out.println("Please select an option by entering the number");
         System.out.println("1.Register");
         System.out.println("2.Login");
         System.out.println("3.Quit");
         System.out.println("4.Help");
+        System.out.print(">>");
     }
 
     public int getLoginOption(ServerFacade sf)
@@ -40,12 +59,24 @@ public class Client
         Scanner in = new Scanner(System.in);
         String username;
         String password;
-        int a = in.nextInt();
+        int a;
+
+        try
+        {
+             a= in.nextInt();
+        }catch (Exception ex){
+            a=4;
+        }
+        String restOfLine = in.nextLine();
+
         switch (a)
         {
             case 1: //register
+                System.out.print("Username: ");
                 username = in.nextLine();
+                System.out.print("Password: ");
                 password = in.nextLine();
+                System.out.print("Email: ");
                 String email = in.nextLine();
                 try
                 {
@@ -57,7 +88,9 @@ public class Client
                 }
                 break;
             case 2:// Login
+                System.out.print("Username: ");
                 username = in.nextLine();
+                System.out.print("Password: ");
                 password = in.nextLine();
                 try
                 {
@@ -85,6 +118,7 @@ public class Client
 
     private void listUserOption()
     {
+        out.print(SET_TEXT_COLOR_WHITE);
         System.out.println("Please select an option by entering the number");
         System.out.println("1.Logout");
         System.out.println("2.List Games");
@@ -92,9 +126,10 @@ public class Client
         System.out.println("4.Join Game");
         System.out.println("5.Join Observer");
         System.out.println("6.Help");
+        System.out.print(">>");
     }
 
-    public void getUserOption(ServerFacade sf)
+    public int getUserOption(ServerFacade sf)
     {
         Scanner in = new Scanner(System.in);
         int a = in.nextInt();
@@ -124,7 +159,10 @@ public class Client
                 break;
             default:
                 break;
+
         }
+        return a;
+
     }
 
     private void logout(ServerFacade sf)
@@ -161,6 +199,13 @@ public class Client
     private void joinGame(ServerFacade sf)
     {
         Scanner in = new Scanner(System.in);
+        try
+        {
+            games = sf.listGames(token).games();
+        } catch (IOException ex)
+            {
+                System.out.println("Failed to get games");
+            }
         System.out.println("Enter Game Number:");
         int gameNum = in.nextInt();
         int gameID = games.get(gameNum - 1).gameID();

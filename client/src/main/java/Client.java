@@ -216,7 +216,14 @@ public class Client
             System.out.println("Failed to get games");
         }
         System.out.println("Enter Game Number:");
-        int gameNum = in.nextInt();
+        int gameNum;
+        try
+        {
+            gameNum = in.nextInt();
+        }catch(Exception ex){
+            System.out.println("Failed to join game");
+            return;
+        }
         int gameID;
         try
         {
@@ -227,22 +234,43 @@ public class Client
             return;
         }
         System.out.println(games.get(gameNum - 1).gameName());
-        System.out.println("    White: " + games.get(gameNum - 1).whiteUsername());
-        System.out.println("    Black: " + games.get(gameNum - 1).blackUsername());
+        String white = games.get(gameNum - 1).whiteUsername();
+                System.out.println("    White: " + white);
+                String black = games.get(gameNum - 1).blackUsername();
+        System.out.println("    Black: " + black);
 
         String playerColor = null;
         while (playerColor == null)
         {
-            System.out.println("\nChoose your Player: \n 1. White\n2. Black");
+            System.out.println("\nChoose your Player: \n 1. White\n2. Black\n3.Observer");
             int color = in.nextInt();
             switch (color)
             {
                 case 1:
+                    if(white!=null){
+                        System.out.println("failed to join game");
+                        return;
+                    }
                     playerColor = "WHITE";
+
                     break;
                 case 2:
+                    if(black!=null){
+                        System.out.println("failed to join game");
+                        return;
+                    }
                     playerColor = "BLACK";
                     break;
+                case 3:
+                    try
+                    {
+                        sf.joinGame(new JoinGameRequest(null, gameID), token);
+                        System.out.println("Joined Game as Observer");
+                    } catch (IOException ex)
+                    {
+                        System.out.println("Failed to Join Game");
+                    }
+                    return;
                 default:
                     System.out.println("invalid choice");
                     playerColor = null;

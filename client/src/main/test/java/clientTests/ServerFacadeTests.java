@@ -7,15 +7,14 @@ import model.Game;
 import model.User;
 import org.junit.jupiter.api.*;
 import org.springframework.security.crypto.bcrypt.*;
-import records.CreateGameRequest;
-import records.GameReturn;
-import records.JoinGameRequest;
-import records.LoginRequest;
+import records.*;
 import server.Server;
 import ClientSupport.*;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 public class ServerFacadeTests {
@@ -258,18 +257,31 @@ public class ServerFacadeTests {
         JoinGameRequest joinReq = new JoinGameRequest("WHITE",6);
         Assertions.assertThrows(Exception.class, () -> serverFacade.joinGame(joinReq,  auth1));
     }
-//
-//    @Test
-//    public void listGamesGood() {
-//        setup();
-//        Assertions.assertTrue(true);
-//    }
-//
-//    @Test
-//    public void listGamesBad() {
-//        setup();
-//        Assertions.assertTrue(true);
-//    }
+
+    @Test
+    public void listGamesGood() {
+        setup();
+        Collection<GameReturn> gameList = new ArrayList<>();
+        AllGamesReturn allGames = null;
+        try
+        {
+            allGames = serverFacade.listGames(auth1);
+            gameList = allGames.games();
+        } catch (Exception ex)
+        {
+            System.out.println("failed to execute listall");
+            System.out.println(ex.getMessage());
+        }
+        Assertions.assertEquals(3, gameList.size());
+    }
+
+    @Test
+    public void listGamesBad() {
+        setup();
+        Collection<GameReturn> gameList = new ArrayList<>();
+        AllGamesReturn allGames = null;
+        Assertions.assertThrows(Exception.class, () -> serverFacade.listGames("ydtcuvio"));
+    }
 
 }
 

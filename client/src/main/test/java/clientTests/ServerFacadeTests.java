@@ -6,9 +6,11 @@ import model.AuthToken;
 import model.Game;
 import model.User;
 import org.junit.jupiter.api.*;
+import org.springframework.security.crypto.bcrypt.*;
 import records.LoginRequest;
 import server.Server;
 import ClientSupport.*;
+
 
 import java.io.IOException;
 
@@ -17,6 +19,7 @@ public class ServerFacadeTests {
 
 
     private static Server server;
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     private AuthTokenDAO tokens;
     private GameDAO games;
     String auth1;
@@ -89,11 +92,11 @@ public class ServerFacadeTests {
             System.out.println(ex.getMessage());
         }
         ////
-        User user1 = new User("user1", "pass1","1@email.com");
+        User user1 = new User("user1",encoder.encode( "pass1"),"1@email.com");
         password1 = user1.getPassword();
-        User user2 = new User("user2","pass2","2@email.com");
+        User user2 = new User("user2",encoder.encode("pass2"),"2@email.com");
         password2 = user2.getPassword();
-        User user3 = new User("user3","pass3","3@email.com");
+        User user3 = new User("user3",encoder.encode("pass3"),"3@email.com");
         password3 = user3.getPassword();
         try
         {
@@ -131,6 +134,7 @@ public class ServerFacadeTests {
         {
             testUser = users.get("user4");
 
+
         } catch (DataAccessException ex)
         {
             System.out.println("failed to execute get");
@@ -138,30 +142,34 @@ public class ServerFacadeTests {
             Assertions.fail();
         }
         Assertions.assertEquals(user4.getUsername(), testUser.getUsername());
-        Assertions.assertEquals("pass4", testUser.getPassword());
+        Assertions.assertTrue(encoder.matches(user4.getPassword(), testUser.getPassword()));
         Assertions.assertEquals(user4.getEmail(), testUser.getEmail());
 
     }
 
-//    @Test
-//    @DisplayName("Bad Register")
-//    public void registerBad() {
-//        setup();
-//        User user4 = new User("user1", "pass4","4@email.com");
-//        Assertions.assertThrows(IOException.class, () ->serverFacade.register(user4));
-//    }
-//
-//    @Test
-//    @DisplayName("Good Get")
-//    public void loginGood() {
-//        setup();
-//        try{
-//            LoginRequest logReq = new LoginRequest("user1","pass1");
-//            serverFacade.login(logReq);
-//        }catch (Exception ex){
-//
-//        }
-//    }
+    @Test
+    @DisplayName("Bad Register")
+    public void registerBad() {
+        setup();
+        User user4 = new User("user1", "pass4","4@email.com");
+        Assertions.assertThrows(Exception.class, () ->serverFacade.register(user4));
+    }
+
+    @Test
+    @DisplayName("Good Login")
+    public void loginGood() {
+        setup();
+        String testAuth;
+        try{
+            LoginRequest logReq = new LoginRequest("user1","pass1");
+            testAuth = serverFacade.login(logReq).authToken();
+        }catch (Exception ex){
+            System.out.println("failed to Login");
+        }
+
+        Assertions.assertEquals(user4.getUsername(), testUser.getUsername());
+
+    }
 //
 //    @Test
 //    public void loginBad() {

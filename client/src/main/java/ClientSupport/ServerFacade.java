@@ -18,8 +18,11 @@ public class ServerFacade
         String token = null;
         String user = new Gson().toJson(newUser);
         String json = coms.doPost(urlString + "/user", user, token);
-        return new Gson().fromJson(json, LoginResponce.class);
-
+        LoginResponce login = new Gson().fromJson(json, LoginResponce.class);
+        if(login.username()==null && login.authToken()== null){
+            throw new IOException(json);
+        }
+        return login;
     }
 
     public LoginResponce login(LoginRequest newLogin) throws IOException

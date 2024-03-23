@@ -1,8 +1,6 @@
 package ClientSupport;
 
-import ClientSupport.Communicator;
 import com.google.gson.Gson;
-import model.Game;
 import model.User;
 import records.*;
 
@@ -69,7 +67,7 @@ public class ServerFacade
 
         String join = new Gson().toJson(joinReq);
         String json = coms.doPut(urlString + "/game", join, token);
-        if(json.contains("Message"))
+        if(json.contains("message"))
         {
             throw new IOException(json);
         }

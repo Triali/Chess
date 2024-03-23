@@ -8,6 +8,8 @@ import model.User;
 import org.junit.jupiter.api.*;
 import org.springframework.security.crypto.bcrypt.*;
 import records.CreateGameRequest;
+import records.GameReturn;
+import records.JoinGameRequest;
 import records.LoginRequest;
 import server.Server;
 import ClientSupport.*;
@@ -31,6 +33,7 @@ public class ServerFacadeTests {
     String password2;
     String password3;
     static ServerFacade serverFacade;
+    int id1;
 
 
 
@@ -77,6 +80,7 @@ public class ServerFacadeTests {
         }
         ////
         Game game1 = new Game("game1");
+
         Game game2 = new Game("game2");
         Game game3 = new Game("game3");
         game2.setBlackUsername("phil");
@@ -87,6 +91,8 @@ public class ServerFacadeTests {
             games.insert(game1);
             games.insert(game2);
             games.insert(game3);
+
+
         } catch (DataAccessException ex)
         {
             System.out.println("failed to execute insert");
@@ -199,9 +205,6 @@ public class ServerFacadeTests {
     @Test
     public void logoutBad() {
         setup();
-
-
-
         Assertions.assertThrows(Exception.class, () -> serverFacade.logout("qwertyuiop"));
     }
 
@@ -227,13 +230,33 @@ public class ServerFacadeTests {
     @Test
     public void joinGameGood() {
         setup();
-        Assertions.assertTrue(true);
+        Game gameA = new Game("testGame");
+        gameA.setID(1);
+        gameA.setWhiteUsername("user1");
+        JoinGameRequest joinReq = new JoinGameRequest("WHITE",1);
+        Game testGame = null;
+        try{
+            serverFacade.joinGame(joinReq,auth1);
+        }catch(Exception ex){
+            System.out.println("failed to join game");
+        }
+        try{
+            testGame = games.get(1);
+        }catch(Exception ex){
+            System.out.println("failed to get game");
+        }
+        Assertions.assertEquals(gameA,testGame);
     }
 
     @Test
     public void joinGameBad() {
         setup();
-        Assertions.assertTrue(true);
+        setup();
+        Game gameA = new Game("testGame");
+        gameA.setID(1);
+        gameA.setWhiteUsername("user1");
+        JoinGameRequest joinReq = new JoinGameRequest("WHITE",6);
+        Assertions.assertThrows(Exception.class, () -> serverFacade.joinGame(joinReq,  auth1));
     }
 //
 //    @Test

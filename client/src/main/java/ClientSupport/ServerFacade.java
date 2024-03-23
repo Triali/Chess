@@ -31,13 +31,23 @@ public class ServerFacade
         return login;
     }
 
+    public void clear() throws IOException
+    {
+        String json = coms.doDelete(urlString + "/db", null);
+        if(json.contains("message"))
+        {
+            throw new IOException(json);
+        }
+    }
+
     public LoginResponce login(LoginRequest newLogin) throws IOException
     {
         String token = null;
         String user = new Gson().toJson(newLogin);
         String json = coms.doPost(urlString + "/session", user, token);
         LoginResponce login = new Gson().fromJson(json, LoginResponce.class);
-        if(login.username()==null && login.authToken()== null){
+        if(json.contains("message"))
+        {
             throw new IOException(json);
         }
         return login;
@@ -46,7 +56,7 @@ public class ServerFacade
     public void logout(String token) throws IOException
     {
         String json = coms.doDelete(urlString + "/session", token);
-        if(!json.equals(""))
+        if(json.contains("message"))
         {
             throw new IOException(json);
         }

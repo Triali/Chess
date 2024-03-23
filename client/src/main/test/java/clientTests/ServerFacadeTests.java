@@ -120,7 +120,6 @@ public class ServerFacadeTests {
     @Test
     @DisplayName("Good Register")
     public void registerGood() {
-
         setup();
         User user4 = new User("user4", "pass4","4@email.com");
         try
@@ -159,23 +158,29 @@ public class ServerFacadeTests {
     @DisplayName("Good Login")
     public void loginGood() {
         setup();
-        String testAuth;
+        String testAuth = null;
+        String testName = null;
         try{
             LoginRequest logReq = new LoginRequest("user1","pass1");
             testAuth = serverFacade.login(logReq).authToken();
         }catch (Exception ex){
             System.out.println("failed to Login");
         }
-
-        Assertions.assertEquals(user4.getUsername(), testUser.getUsername());
+        try{
+            testName = tokens.get(testAuth).getUsername();
+        } catch (Exception ex){
+        System.out.println("failed to get Auth");
+    }
+        Assertions.assertEquals("user1",testName);
 
     }
-//
-//    @Test
-//    public void loginBad() {
-//        setup();
-//        Assertions.assertTrue(true);
-//    }
+
+    @Test
+    public void loginBad()
+    {
+        setup();
+        Assertions.assertThrows(Exception.class, () -> serverFacade.login(new LoginRequest("user1","pass2")));
+    }
 //
 //    @Test
 //    public void logoutGood() {

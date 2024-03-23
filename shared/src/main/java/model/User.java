@@ -8,7 +8,7 @@ public class User
     private String username;
     private String password;
     private String email;
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public String getPassword()
     {
@@ -53,7 +53,7 @@ public class User
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(username, user.username) && encoder.matches(password,user.password) && Objects.equals(email, user.email);
+        return Objects.equals(username, user.username) && Objects.equals(email, user.email);
     }
 
     @Override

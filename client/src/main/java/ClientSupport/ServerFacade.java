@@ -10,8 +10,15 @@ import java.io.IOException;
 
 public class ServerFacade
 {
-    private String urlString = "http://localhost:8080";
+    private String urlString = "http://localhost:";
     private Communicator coms = new Communicator();
+
+    public ServerFacade(int port){
+        urlString += port;
+    }
+    public ServerFacade(){
+        urlString += "8080";
+    }
 
     public LoginResponce register(User newUser) throws IOException
     {
@@ -30,7 +37,11 @@ public class ServerFacade
         String token = null;
         String user = new Gson().toJson(newLogin);
         String json = coms.doPost(urlString + "/session", user, token);
-        return new Gson().fromJson(json, LoginResponce.class);
+        LoginResponce login = new Gson().fromJson(json, LoginResponce.class);
+        if(login.username()==null && login.authToken()== null){
+            throw new IOException(json);
+        }
+        return login;
     }
 
     public void logout(String token) throws IOException
